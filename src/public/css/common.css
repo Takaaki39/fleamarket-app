@@ -1,0 +1,32 @@
+html {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+}
+
+.font-color {
+    color: #8B7969;
+}
+
+.header {
+    background: #fff;
+    box-sizing: border-box;
+    height: 100px;
+    border: 1px solid #E0DFDE;
+}
+
+.header__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px 15px;
+    position: relative;
+}
+
+.header__logo {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-size: 40px;
+}
