@@ -14,10 +14,15 @@
 </head>
 <body>
     <header class="header">
-        <div class="header__inner">
-            <a class="header__logo font-color" href="/">FashionablyLate</a>
-            @yield('header_button')
+        <!-- 左ロゴ -->
+        <div class="header-section header-left">
+            <a href="{{ route('index') }}">
+                <img src="{{ asset('storage/images/logo.svg') }}" alt="COACHTECH">
+            </a>
         </div>
+
+        @yield('header')
+        
     </header>
 
     @yield('content')

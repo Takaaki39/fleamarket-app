@@ -1,0 +1,158 @@
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* セクション */
+.section {
+    margin-bottom: 30px;
+}
+
+.section h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.image-upload-wrapper {
+    width: 100%;
+}
+
+/* 商品画像 */
+.image-upload {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    min-height: 150px;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* プレビュー部分 */
+.image-preview {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #888;
+    font-size: 14px;
+}
+
+/* プレビュー画像 */
+.image-preview img {
+    width: 100%;
+    /* 横幅をcontainerに合わせる */
+    height: auto;
+    /* 高さは自動調整（アスペクト比維持） */
+    border-radius: 6px;
+    display: block;
+    object-fit: contain;
+}
+
+.btn-select {
+    color: #FF5655;
+    /* 文字色 */
+    background-color: #fff;
+    /* 背景色 */
+    border: 2px solid #FF5655;
+    /* 枠線追加 */
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: absolute;
+    /* ✅ 枠内で中央寄せ */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btn-select:hover {
+    background-color: #FF5655;
+    color: #fff;
+    border-color: #FF5655;
+}
+
+.btn-select.outside {
+    position: static;
+    display: block;
+    margin: 10px auto 0 auto;
+    transform: none;
+}
+
+/* フォーム */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    height: 100px;
+}
+
+/* カテゴリー */
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.categories span {
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.categories span:hover {
+    background: #ffeaea;
+}
+
+.categories span.active {
+    background: #ff6b6b;
+    color: #fff;
+}
+
+/* ボタン */
+.btn-submit {
+    width: 100%;
+    background: #ff6b6b;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}

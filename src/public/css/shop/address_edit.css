@@ -1,0 +1,50 @@
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.title {
+    font-size: 22px;
+    margin-bottom: 40px;
+}
+
+.address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* 更新ボタン */
+.update-btn {
+    background: #ff5c5c;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.update-btn:hover {
+    opacity: 0.9;
+}
