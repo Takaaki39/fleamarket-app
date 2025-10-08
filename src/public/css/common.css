@@ -1,176 +1,227 @@
+.error {
+    color: red;
+}
+
+/* === ヘッダー：ベース（PC向け、適用は >768px 想定） === */
 .header {
-    display: flex;
+    display: grid;
     align-items: center;
-    /* 中央揃え（上下位置） */
-    justify-content: space-between;
-    height: 80px;
-    background-color: black;
-    color: white;
+    gap: 12px;
     padding: 0 40px;
-    /* 左右に余白 */
     box-sizing: border-box;
+    background: black;
+    color: white;
+    height: 80px;
+    position: relative;
+    z-index: 1;
+    /* PC: ロゴ幅確保 + 検索は最小幅を持たせる（重なり防止） */
+    grid-template-columns: minmax(338px, 400px) minmax(280px, 1fr) minmax(220px, auto);
+    grid-template-areas: "logo search controls";
 }
 
-/* セクション共通 */
-.header-section {
+.header-left {
+    grid-area: logo;
     display: flex;
     align-items: center;
-    /* 子要素を上下中央に */
 }
 
-/* 左ロゴ */
+.header-center {
+    grid-area: search;
+    display: flex;
+    justify-content: center;
+}
+
+.header-right {
+    grid-area: controls;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* ロゴ */
 .header-left img {
     height: 36px;
     display: block;
 }
 
-/* 中央検索フォーム */
-.header-center {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.header-center form {
+/* 検索フォーム */
+.search-form {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
 }
 
-.header-center input {
+.search-form input {
     width: 100%;
     height: 40px;
-    padding: 0 12px;
-    border-radius: 6px;
+    padding: 0 14px;
+    border-radius: 8px;
     border: none;
     font-size: 16px;
     color: #000;
 }
 
-.header-center input::placeholder {
+.search-form input::placeholder {
     color: black;
-    opacity: 1;
 }
 
-/* 右リンク・ボタン類 */
-.header-right {
+/* PC用リンク群（表示） */
+.header-links {
     display: flex;
-    align-items: center;
-    /* ← 高さをロゴと揃える */
     gap: 20px;
+    align-items: center;
 }
 
-/* ログイン／ログアウト・マイページ */
 .header-auth {
     background: none;
     border: none;
     color: white;
-    font-size: 16px;
-    cursor: pointer;
+    font-size: 15px;
     text-decoration: none;
+    cursor: pointer;
     line-height: 1;
-    /* 余白を消して上下ずれ防止 */
     padding: 0;
 }
 
-/* 出品ボタン */
 .sell-btn {
     background: white;
     color: black;
-    border: none;
-    border-radius: 6px;
     padding: 8px 16px;
+    border-radius: 6px;
     font-size: 16px;
-    cursor: pointer;
     text-decoration: none;
-    display: inline-block;
+    cursor: pointer;
 }
 
-/* ===== レスポンシブ（768px以下） ===== */
+/* ハンバーガー（通常は非表示） */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 4001;
+    /* 常に前面 */
+    position: relative;
+}
+
+/* ハンバーガーメニュー（ドロップダウン） */
+.header-menu {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background: black;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    gap: 8px;
+    z-index: 4000;
+    pointer-events: none;
+    /* 初期は無効 */
+}
+
+.header-menu.active {
+    display: flex;
+    pointer-events: auto;
+}
+
+/* === タブレット（<=768px） ===
+   - 1行： ロゴ | 検索 | ☰
+   - header-links を隠して hamburger を表示
+*/
 @media (max-width: 768px) {
     .header {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 10px 20px;
+        grid-template-columns: minmax(300px, 350px) 1fr auto;
+        grid-template-areas: "logo search controls";
+        padding: 8px 20px;
+        height: 64px;
     }
 
-    /* 左ロゴ */
+    .header-left img {
+        height: 32px;
+    }
+
+    /* 検索幅は控えめにして重なりを回避 */
+    .header-center {
+        justify-content: flex-start;
+    }
+
+    .search-form {
+        max-width: 240px;
+    }
+
+    .search-form input {
+        height: 36px;
+        font-size: 15px;
+    }
+
+    /* 表示切替 */
+    .header-links {
+        display: none;
+    }
+
+    /* PCの横並びリンクは非表示 */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* ハンバーガー表示 */
+
+    /* メニュー位置（タブレットは右上） */
+    .header-menu {
+        top: 64px;
+        right: 20px;
+    }
+}
+
+/* === スマホ（<=425px） ===
+   - 1行目: ロゴ (left) + ☰ (right)
+   - 2行目: 検索フォーム（幅100%）
+*/
+@media (max-width: 425px) {
+    .header {
+        padding: 8px 12px;
+        gap: 8px;
+        height: auto;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "logo controls"
+            "search search";
+    }
+
     .header-left img {
         height: 28px;
     }
 
-    /* 検索フォームを下にずらさない → 固定位置 */
     .header-center {
-        order: 2;
-        /* ← 上下の入れ替え防止 */
-        flex: 1;
         justify-content: center;
-        margin-top: 0;
-        /* ← 落ちないように */
-    }
-
-    .header-center form {
         width: 100%;
-        max-width: 400px;
     }
 
-    .header-center input {
+    .search-form {
+        width: 100%;
+        max-width: none;
+    }
+
+    .search-form input {
         height: 36px;
         font-size: 14px;
     }
 
-    /* 右側 */
-    .header-right {
-        order: 3;
-        justify-content: flex-end;
-        width: auto;
-        margin-top: 0;
+    .header-links {
+        display: none;
     }
 
-    /* ハンバーガーアイコン */
     .menu-toggle {
         display: block;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 28px;
-        cursor: pointer;
-        margin-left: 10px;
     }
 
-    /* メニュー */
+    /* スマホではメニューを検索の下に出す（被らないよう） */
     .header-menu {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background: black;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        z-index: 10;
-    }
-
-    .header-menu.active {
-        display: flex;
-    }
-}
-
-/* PCではハンバーガー非表示 */
-@media (min-width: 769px) {
-    .menu-toggle {
-        display: none;
-    }
-
-    .header-menu {
-        display: flex !important;
-        flex-direction: row;
-        position: static;
-        gap: 20px;
-        background: none;
-        box-shadow: none;
-        padding: 0;
+        top: calc(100% + 8px);
+        right: 12px;
     }
 }

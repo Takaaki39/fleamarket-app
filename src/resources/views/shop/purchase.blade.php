@@ -37,7 +37,7 @@
     </div>
 
     <aside class="summary">
-        <form id="purchase-form" action="{{ route('purchase.store', $item->id) }}" method="post">
+        <form id="purchase-form" action="{{ route('purchase.pay', $item->id) }}" method="post">
             @csrf
             <input type="hidden" id="payment-method-hidden" name="payment">
             <input type="hidden" name="postal_code" value="{{$delivery['postal_code']}}">

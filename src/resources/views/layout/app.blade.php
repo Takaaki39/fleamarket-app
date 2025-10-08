@@ -20,9 +20,16 @@
                 <img src="{{ asset('storage/images/logo.svg') }}" alt="COACHTECH">
             </a>
         </div>
-
-        @yield('header')
         
+        <!-- 検索（子ビューで定義） -->
+        <div class="header-center">
+            @yield('header-center')
+        </div>
+
+        <!-- 右側コントロール（子ビューで定義） -->
+        <div class="header-right">
+            @yield('header-right')
+        </div>
     </header>
 
     @yield('content')

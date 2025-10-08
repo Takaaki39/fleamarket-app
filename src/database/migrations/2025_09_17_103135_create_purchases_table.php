@@ -17,6 +17,7 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
+            $table->boolean('paid')->default(false);       // 支払済み
             $table->boolean('shipped')->default(false);
             $table->enum('payment', [1, 2])->default(1);    // 支払い方法
             $table->string('postal_code');   // 郵便番号
