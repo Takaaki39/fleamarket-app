@@ -54,9 +54,6 @@ class SellController extends Controller
         
         // ItemControllerのindex()を呼び出す
         return redirect()->route('index')->with('success', '商品を出品しました！');
-
-        //$items = Item::all();
-        //return view('index', compact('items'))->with('success', '商品を出品しました！');
     }
 
 }
