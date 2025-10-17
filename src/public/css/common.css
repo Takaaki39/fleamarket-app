@@ -2,6 +2,48 @@
     color: red;
 }
 
+.success-message {
+    position: relative;
+    top: 0;
+    background-color: #e6ffed;
+    color: #0a662e;
+    border: 1px solid #9fe0af;
+    border-radius: 6px;
+    padding: 12px 20px;
+    margin: 0 auto;
+    max-width: 1fr;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    opacity: 0;
+    animation: successSlide 5s ease forwards;
+    /* 合計5秒：
+       1秒で降りる＋3秒表示＋1秒で上がって消える */
+}
+
+/* アニメーション定義 */
+@keyframes successSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
 /* === ヘッダー：ベース（PC向け、適用は >768px 想定） === */
 .header {
     display: grid;

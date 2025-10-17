@@ -104,8 +104,6 @@ class PurchaseController extends Controller
 
         // Stripeの決済画面にリダイレクト
         return redirect($session->url);
-
-        //return redirect()->route('index')->with('success', '購入が完了しました！');
     }
 
     public function success()

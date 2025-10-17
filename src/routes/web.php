@@ -58,7 +58,7 @@ Route::get('/email/verify', function () {
 // 認証メール再送
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-    return redirect('/email/verify')->with('message', '認証メールを再送しました！');
+    return redirect('/email/verify')->with('success', '認証メールを再送しました！');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // 手動コード入力ページ

@@ -1,0 +1,50 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    background-color: #f8fafc;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+}
+
+/* メッセージボックス */
+.message {
+    background-color: #ffffff;
+    padding: 40px 60px;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+/* タイトル */
+.message h2 {
+    color: #16a34a;
+    /* 明るめの緑 (成功色) */
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+}
+
+/* サブメッセージ */
+.message p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 24px;
+}
+
+/* トップへ戻るボタン */
+.message a {
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: #16a34a;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.message a:hover {
+    background-color: #15803d;
+}

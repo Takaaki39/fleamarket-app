@@ -18,7 +18,7 @@ class CreateItemsTable extends Migration
 
             $table->string('name')->comment('商品名');
             $table->unsignedInteger('price')->comment('価格(円)');
-            $table->string('brand_name')->nullbale()->comment('ブランド名');
+            $table->string('brand_name')->nullable()->comment('ブランド名');
             $table->text('description')->comment('商品説明');
             $table->string('img_url')->nullable()->comment('商品画像URl');
             $table->enum('condition', ['good', 'fair', 'poor', 'bad'])
