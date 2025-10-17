@@ -1,5 +1,4 @@
 
-{{-- 検索フォーム（子ビュー） --}}
 @section('header-center')
     <form action="{{ route('index') }}" method="GET" class="search-form">
         <input
@@ -14,7 +13,6 @@
     </form>
 @endsection
 
-{{-- 右側コントロール（子ビュー） --}}
 @section('header-right')
 <div class="controls">
     <!-- PCで表示するリンク群（横並び） -->

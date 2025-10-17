@@ -7,7 +7,7 @@
 
 @section('content')
 <main>
-     <!-- タブメニュー -->
+    <!-- タブメニュー -->
     <nav class="tab-menu">
         <div class="tab-inner">
             <a 
