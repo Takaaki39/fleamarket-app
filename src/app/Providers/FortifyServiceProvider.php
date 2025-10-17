@@ -72,7 +72,7 @@ class FortifyServiceProvider extends ServiceProvider
             if ($user &&
                 Hash::check($request->password, $user->password)) {
 
-                // ✅ メール未認証の場合はログインさせない
+                // メール未認証の場合はログインさせない
                 if (is_null($user->email_verified_at)) {
                     throw ValidationException::withMessages([
                         Fortify::username() => __('auth.unverified'),
