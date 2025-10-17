@@ -2,8 +2,8 @@
 
 ## 環境構築
 Dockerビルド
-1. git clone [git@github.com:Takaaki39/confirmation-test.git](https://github.com/Takaaki39/fleamarket-app.git)
-2. cd fleamarket-app/fleamarket/
+1. git clone [git@github.com:Takaaki39/fleamarket-app.git](https://github.com/Takaaki39/fleamarket-app.git)
+2. cd fleamarket-app/
 3. docker-compose up -d --build
 
 ※MySQLはOSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集してください。
@@ -19,6 +19,7 @@ Laravel環境構築
 8. composer require stripe/stripe-php //stripe SDKインストール
 9. ※windowsの場合 :
      exitで抜けた後 sudo chmod -R 777 *
+11. ./set_stripe_key.sh
 
 テストアカウント
 1. TestUser1
@@ -30,11 +31,15 @@ Laravel環境構築
 
 
 UnitTest
-1. DB作成
-2. cp .env .env.testing
-3. php artisan key:generate --env=testing
-4. php artisan config:clear
-5. php artisan migrate --env=testing
+1. docker-compose exec mysql bash
+2. mysql -u root -p
+3. パスワードはroot
+4. CREATE DATABASE fleamarket_test;
+5. exit 2回
+6. docker-compose exec php bash
+7. php artisan key:generate --env=testing
+8. php artisan config:clear
+9. php artisan migrate --env=testing
 
 テスト実行
 1. php artisan config:clear
