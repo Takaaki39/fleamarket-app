@@ -24,7 +24,7 @@ class AddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'], // 例: 123-4567
+            'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'], // 123-4567
             'address' => ['required', 'string'],                    // 入力必須
         ];
     }

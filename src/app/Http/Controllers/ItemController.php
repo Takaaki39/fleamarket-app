@@ -41,7 +41,7 @@ class ItemController extends Controller
                         ->from('item_stars')
                         ->where('user_id', auth()->id());
                 })
-                ->whereNotIn('id', $mySellItemIds) // ← 自分の出品物を除外
+                ->whereNotIn('id', $mySellItemIds) // 自分の出品物を除外
                 ->when($search, function ($query, $search) {
                     return $query->where('name', 'like', "%{$search}%");
                 })

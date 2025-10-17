@@ -49,7 +49,7 @@ class LoginRequest extends FortifyLoginRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            // ここでどのフィールドにエラーを付けるかを指定（通常は 'email' にする）
+            // どのフィールドにエラーを付けるかを指定
             throw ValidationException::withMessages([
                 'email' => 'ログイン情報が登録されていません。',
             ]);

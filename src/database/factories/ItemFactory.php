@@ -18,7 +18,8 @@ class ItemFactory extends Factory
             'price' => $this->faker->numberBetween(100, 300000),
             'brand_name' => $this->faker->name(),
             'description' => $this->faker->sentence(),
-            'condition' => 1
+            'condition' => 1,
+            'img_url' => 'images/icons/test_icon.png'
         ];
     }
 }

@@ -87,7 +87,7 @@ class PurchaseController extends Controller
                     'product_data' => [
                         'name' => $item->name,
                     ],
-                    'unit_amount' => $item->price, // 円単位
+                    'unit_amount' => $item->price,
                 ],
                 'quantity' => 1,
             ]],
@@ -135,17 +135,17 @@ class PurchaseController extends Controller
         // イベントタイプに応じた処理
         switch ($event['type']) {
 
-            // 💰 カード・コンビニいずれも支払い完了時に発火
+            // カード・コンビニいずれも支払い完了時に発火
             case 'checkout.session.completed':
                 $session = $event['data']['object'];
 
-                // 商品ID（＝Purchaseのid）をmetadataに入れておく想定
+                // 商品ID（Purchaseのid）をmetadataに入れておく想定
                 $purchaseId = $session['metadata']['purchase_id'] ?? null;
 
                 if ($purchaseId) {
                     $purchase = Purchase::find($purchaseId);
                     if ($purchase) {
-                        $purchase->paid = true; // ←ここスペル修正済み
+                        $purchase->paid = true;
                         $purchase->save();
                     }
                 }

@@ -203,7 +203,7 @@ class FleaMarketTest extends TestCase
 
     public function test_item_list_shows_sold_label_for_purchased_items()
     {
-        // --- 1. テスト用データ作成 ---
+        // 1. テスト用データ作成
         $user = User::factory()->create([
             'email_verified_at' => now(), // 認証済み
         ]);
@@ -220,10 +220,10 @@ class FleaMarketTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        // --- 2. /items をGET ---
+        // 2. /items をGET
         $response = $this->actingAs($user)->get('/');
 
-        // --- 3. soldフラグを確認 ---
+        // 3. soldフラグを確認
         $items = $response->viewData('items');
 
         $soldItem = collect($items)->firstWhere('id', $item->id);
@@ -236,7 +236,7 @@ class FleaMarketTest extends TestCase
 
     public function test_item_list_does_not_show_own_items()
     {
-        // --- 1. テスト用データ作成 ---
+        // 1. テスト用データ作成
         $user = User::factory()->create([
             'email_verified_at' => now(), // 認証済み
         ]);
@@ -251,12 +251,12 @@ class FleaMarketTest extends TestCase
         // 他人の商品も作成
         $otherItem = Item::factory()->create();
 
-        // --- 2. /items をGET ---
+        // 2. /items をGET
         $response = $this->actingAs($user)->get('/');
 
         $items = $response->viewData('items');
 
-        // --- 3. 自分が出品した商品が含まれていないことを確認 ---
+        // 3. 自分が出品した商品が含まれていないことを確認 ---
         $isOwnItemShown = collect($items)->contains(function ($item) use ($myItem) {
             return $item->id === $myItem->id;
         });
@@ -713,8 +713,9 @@ class FleaMarketTest extends TestCase
             'building' => $user->building,
         ];
         // 購入
-        $purchaseResponse = $this->actingAs($user)
-                                ->post("/purchase/{$purchaseItem->id}", $purchaseData)
+        $this->actingAs($user);
+        $this->withoutExceptionHandling();
+        $purchaseResponse = $this->post("/purchase/{$purchaseItem->id}", $purchaseData)
                                 ->assertStatus(302);
         
         // マイページに遷移

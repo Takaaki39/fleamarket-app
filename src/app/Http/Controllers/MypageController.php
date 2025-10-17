@@ -45,7 +45,6 @@ class MypageController extends Controller
         if ($request->hasFile('icon_img')) 
         {
             $path = $request->file('icon_img')->store('images/icons', 'public'); 
-            // 例: storage/app/public/images/xxxxxx.jpg
 
             $user->icon_img = $path;
         }

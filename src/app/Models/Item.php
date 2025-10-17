@@ -68,17 +68,16 @@ class Item extends Model
     // img_url のアクセサ
     public function getImgUrlAttribute($value)
     {
-        // 値が null の場合はデフォルト画像でも可（任意）
         if (!$value) {
             return asset('images/noimage.png');
         }
 
-        // https から始まる場合（外部URL）
+        // https から始まる場合
         if (str_starts_with($value, 'https://') || str_starts_with($value, 'http://')) {
             return $value;
         }
 
-        // storage 内のパス（例: "images/items/xxx.jpg"）
+        // storage 内のパス
         if (str_starts_with($value, 'images')) {
             return asset('storage/' . $value);
         }
