@@ -15,10 +15,10 @@ class Item extends Model
     public function getConditionLabelAttribute()
     {
         return match ($this->condition) {
-            'good' => '良好',
-            'fair' => '目立った傷や汚れ無し',
-            'poor' => 'やや傷や汚れあり',
-            'bad'  => '状態が悪い',
+            1 => '良好',
+            2 => '目立った傷や汚れ無し',
+            3 => 'やや傷や汚れあり',
+            4  => '状態が悪い',
             default => '不明',
         };
     }

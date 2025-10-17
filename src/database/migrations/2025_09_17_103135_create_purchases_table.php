@@ -20,9 +20,9 @@ class CreatePurchasesTable extends Migration
             $table->boolean('paid')->default(false);       // 支払済み
             $table->boolean('shipped')->default(false);
             $table->enum('payment', [1, 2])->default(1);    // 支払い方法
-            $table->string('postal_code');   // 郵便番号
-            $table->string('address');       // 住所
-            $table->string('building')->nullable(); // 建物名
+            $table->string('postal_code', 255);   // 郵便番号
+            $table->string('address', 255);       // 住所
+            $table->string('building', 255)->nullable(); // 建物名
             $table->timestamps();
         });
     }

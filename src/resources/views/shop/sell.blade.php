@@ -47,10 +47,10 @@
       <div class="form-group">
         <label>商品の状態</label>
         <select name="condition" required>
-          <option value="good">良好</option>
-          <option value="fair">目立った傷や汚れなし</option>
-          <option value="poor">やや傷や汚れあり</option>
-          <option value="bad">状態が悪い</option>
+          <option value=1>良好</option>
+          <option value=2>目立った傷や汚れなし</option>
+          <option value=3>やや傷や汚れあり</option>
+          <option value=4>状態が悪い</option>
         </select>
         @error('condition')
           <p class="error">{{ $message }}</p>

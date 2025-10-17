@@ -18,7 +18,7 @@ class ItemFactory extends Factory
             'price' => $this->faker->numberBetween(100, 300000),
             'brand_name' => $this->faker->name(),
             'description' => $this->faker->sentence(),
-            'condition' => 'good'
+            'condition' => 1
         ];
     }
 }

@@ -194,13 +194,7 @@ class FleaMarketTest extends TestCase
      */
     public function test_item_list_displays_all_items()
     {
-        $item = Item::create([
-            'name' => 'テスト商品',
-            'brand_name' => 'ブランド名',
-            'price' => 1000,
-            'description' => '説明文',
-            'condition' => 'good'
-        ]);
+        $item = Item::factory()->create();
         $response = $this->get('/');
 
         $response->assertStatus(200);
@@ -213,13 +207,7 @@ class FleaMarketTest extends TestCase
         $user = User::factory()->create([
             'email_verified_at' => now(), // 認証済み
         ]);
-        $item = Item::create([
-            'name' => 'テスト商品',
-            'brand_name' => 'ブランド名',
-            'price' => 1000,
-            'description' => '説明文',
-            'condition' => 'good'
-        ]);
+        $item = Item::factory()->create();
 
         // purchases テーブルに購入履歴を追加
         \DB::table('purchases')->insert([
@@ -252,13 +240,7 @@ class FleaMarketTest extends TestCase
         $user = User::factory()->create([
             'email_verified_at' => now(), // 認証済み
         ]);
-        $myItem = Item::create([
-            'name' => '自分の商品',
-            'brand_name' => 'ブランド名',
-            'price' => 2000,
-            'description' => '説明文',
-            'condition' => 'good'
-        ]);
+        $myItem = Item::factory()->create();
 
         // 出品情報を sells テーブルに登録
         \DB::table('sells')->insert([
@@ -267,13 +249,7 @@ class FleaMarketTest extends TestCase
         ]);
 
         // 他人の商品も作成
-        $otherItem = Item::create([
-            'name' => '他人の商品',
-            'brand_name' => '別ブランド',
-            'price' => 3000,
-            'description' => '説明文',
-            'condition' => 'good'
-        ]);
+        $otherItem = Item::factory()->create();
 
         // --- 2. /items をGET ---
         $response = $this->actingAs($user)->get('/');
@@ -810,7 +786,7 @@ class FleaMarketTest extends TestCase
             'name' => 'テスト商品',
             'brand_name' => 'テストブランド',
             'description' => 'これはテスト用の商品の説明です。',
-            'condition' => 'good',
+            'condition' => 1,
             'price' => 12000,
             'categories' => json_encode([1, 2]), // 複数カテゴリを想定
             'img_url' => $image,
@@ -829,7 +805,7 @@ class FleaMarketTest extends TestCase
             'name' => 'テスト商品',
             'brand_name' => 'テストブランド',
             'description' => 'これはテスト用の商品の説明です。',
-            'condition' => 'good',
+            'condition' => 1,
             'price' => 12000,
         ]);
 

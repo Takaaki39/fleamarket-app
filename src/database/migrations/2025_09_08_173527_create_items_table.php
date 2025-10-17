@@ -14,22 +14,23 @@ class CreateItemsTable extends Migration
     public function up()
     {
         Schema::create('items', function (Blueprint $table) {
-            $table->id();
-
-            $table->string('name')->comment('商品名');
-            $table->unsignedInteger('price')->comment('価格(円)');
-            $table->string('brand_name')->nullable()->comment('ブランド名');
+            $table->id(); // bigint unsigned + primary key + auto increment
+            $table->string('name', 255)->comment('商品名');
+            $table->unsignedInteger('price')->comment('価格（円）');
+            $table->string('brand_name', 255)->nullable()->comment('ブランド名');
             $table->text('description')->comment('商品説明');
-            $table->string('img_url')->nullable()->comment('商品画像URl');
-            $table->enum('condition', ['good', 'fair', 'poor', 'bad'])
-                  ->default('good')
-                  ->comment('コンディション');
+            $table->string('img_url', 255)->comment('画像URL');
+
+            // condition
+            // 1:新品, 2:良好, 3:やや傷あり, 4:状態悪い
+            $table->tinyInteger('condition')
+                  ->unsigned()
+                  ->comment('状態: 1〜4');
 
             $table->timestamps();
 
-            // よく使いそうな項目にインデックス
-            $table->index('brand_name');
             $table->index('condition');
+            $table->index('brand_name');
         });
     }
 
