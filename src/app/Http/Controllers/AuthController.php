@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
+    public function auth(EmailVerificationRequest $request) 
+    {
+        $request->fulfill(); // メールアドレス認証完了
+        return redirect('/mypage/profile')->with('success', 'メール認証が完了しました！');
+    }
+
+    public function wait() 
+    {
+        return view('auth.verify-email');
+    }
+
+    public function resending(Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return redirect('/email/verify')->with('success', '認証メールを再送しました！');
+    }
+
     public function show()
     {
         return view('auth.verify-manual');

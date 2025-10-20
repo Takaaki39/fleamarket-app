@@ -28,9 +28,9 @@ Route::prefix('purchase')->group(function () {
     // 購入関連
     Route::get('/address/{item_id}', [PurchaseController::class, 'address'])->name('purchase.address.edit');
     Route::post('/address/{item_id}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
-    Route::post('/{item_id}', [PurchaseController::class, 'pay'])->name('purchase.pay');
 
     // 支払い完了後の画面表示(Route::get('/purchase/{item_id}',と衝突して404になるので前に持ってくる)
+    Route::post('/{item_id}', [PurchaseController::class, 'pay'])->name('purchase.pay');
     Route::get('/success', [PurchaseController::class, 'success'])->name('purchase.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
 
@@ -44,32 +44,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'index'])->name('purchase.index');
 });
 
-// メール内のURLでの認証（Fortify標準）
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // メールアドレス認証完了
-    return redirect('/mypage/profile')->with('success', 'メール認証が完了しました！');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::prefix('email')->group(function () {
+    // メール内のURLでの認証（Fortify標準）
+    Route::get('/verify/{id}/{hash}', [AuthController::class, 'auth'])
+        ->middleware(['auth', 'signed'])
+        ->name('verification.verify');
+        
+    // メール認証待ち画面
+    Route::get('/verify', [AuthController::class, 'wait'])
+        ->middleware('auth')
+        ->name('verification.notice');
 
-// メール認証待ち画面
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+    // 認証メール再送
+    Route::post('/verification-notification', [AuthController::class, 'resending'])
+        ->middleware(['auth', 'throttle:6,1'])
+        ->name('verification.send');
 
-// 認証メール再送
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return redirect('/email/verify')->with('success', '認証メールを再送しました！');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    // 手動コード入力ページ
+    Route::get('/verify/manual', [AuthController::class, 'show'])
+        ->middleware('auth')
+        ->name('verification.manual');
 
-// 手動コード入力ページ
-Route::get('/email/verify/manual', [AuthController::class, 'show'])
-    ->middleware('auth')
-    ->name('verification.manual');
-
-// コード入力フォーム送信処理
-Route::post('/email/verify/manual', [AuthController::class, 'verify'])
-    ->middleware('auth')
-    ->name('verification.manual.verify');
+    // コード入力フォーム送信処理
+    Route::post('/verify/manual', [AuthController::class, 'verify'])
+        ->middleware('auth')
+        ->name('verification.manual.verify');
+});
 
 // 商品詳細ページ
 Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show');
