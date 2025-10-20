@@ -5,7 +5,9 @@ Dockerビルド
 1. git clone [git@github.com:Takaaki39/fleamarket-app.git](https://github.com/Takaaki39/fleamarket-app.git)
 2. cd fleamarket-app/
 3. docker-compose up -d --build
+
 ※エラー(Error response from daemon: Conflict.)が出た場合はdocker-compose downなどしてコンフリクトしてるコンテナを削除して再度3.を実行してください。
+
 ※MySQLはOSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集してください。
 
 Laravel環境構築
