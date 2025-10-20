@@ -159,6 +159,7 @@ class FleaMarketTest extends TestCase
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password123'),
+            'email_verified_at' => now(), // 認証済み
         ]);
 
         $response = $this->post('/login', [
