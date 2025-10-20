@@ -169,11 +169,11 @@
     pointer-events: auto;
 }
 
-/* === タブレット（<=768px） ===
+/* === タブレット（<=1024px） ===
    - 1行： ロゴ | 検索 | ☰
    - header-links を隠して hamburger を表示
 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .header {
         grid-template-columns: minmax(300px, 350px) 1fr auto;
         grid-template-areas: "logo search controls";
@@ -191,7 +191,9 @@
     }
 
     .search-form {
-        max-width: 240px;
+        width: 100%;
+        max-width: 500px;
+        min-width: 240px;
     }
 
     .search-form input {

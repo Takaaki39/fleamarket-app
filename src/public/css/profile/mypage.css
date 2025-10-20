@@ -1,15 +1,11 @@
-/* -------------------- */
 /* 基本スタイル（PC） */
-/* -------------------- */
 .profile {
     width: 1000px;
-    /* height: 150px; ← ❌ 削除！固定高さやめる */
     margin: 50px auto;
     display: flex;
     align-items: center;
     padding: 0 20px;
     flex-wrap: wrap;
-    /* ✅ edit-btn が2段目に落ちてもOK */
     gap: 20px;
     position: relative;
 }
@@ -63,18 +59,14 @@
     color: white;
 }
 
-/* -------------------- */
 /* タブエリア */
-/* -------------------- */
 .tabs {
     display: flex;
     border-bottom: 1px solid #ccc;
     margin: 20px auto;
     width: 100%;
     max-width: 1350px;
-    /* ✅ itemsと同じ幅制限 */
     padding-left: 20px;
-    /* ✅ 左端に寄せるための余白調整 */
     box-sizing: border-box;
 }
 
@@ -90,9 +82,7 @@
     font-weight: bold;
 }
 
-/* -------------------- */
 /* 商品カード */
-/* -------------------- */
 .items {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
@@ -203,8 +193,6 @@
 
     .tabs {
         justify-content: center;
-        /* ✅ 中央寄せ */
         padding-left: 0;
-        /* 左寄せ解除 */
     }
 }

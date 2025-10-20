@@ -65,19 +65,6 @@
     color: #333;
 }
 
-.star {
-    width: 40px;
-    height: 40px;
-    background: yellow;
-    /* 塗りたい色 */
-    -webkit-mask-image: url('/storage/images/star.png');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-image: url('/storage/images/star.png');
-    mask-repeat: no-repeat;
-    mask-size: contain;
-}
-
 .star-btn {
     background-color: white;
     border: none;
@@ -201,52 +188,6 @@ textarea {
     font-size: 16px;
     cursor: pointer;
 }
-
-/* --- タブレット対応（～768px） --- 
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-        max-width: 90%;
-    }
-
-    .product-title {
-        font-size: 32px;
-        text-align: center;
-    }
-
-    .brand {
-        font-size: 18px;
-        text-align: center;
-    }
-
-    .price {
-        font-size: 32px;
-        text-align: center;
-    }
-
-    .actions {
-        justify-content: center;
-    }
-
-    .buy-btn {
-        font-size: 15px;
-        padding: 10px;
-        width: 100%;
-    }
-
-    .description,
-    .info,
-    .comments {
-        margin: 15px 0;
-    }
-
-    .comment-body .text {
-        font-size: 14px;
-        padding: 8px;
-    }
-}*/
 
 /* --- スマホ対応（～425px） --- */
 @media (max-width: 425px) {
