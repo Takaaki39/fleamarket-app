@@ -5,7 +5,7 @@ Dockerビルド
 1. git clone [git@github.com:Takaaki39/fleamarket-app.git](https://github.com/Takaaki39/fleamarket-app.git)
 2. cd fleamarket-app/
 3. docker-compose up -d --build
-
+※エラー(Error response from daemon: Conflict.)が出た場合はdocker-compose downなどしてコンフリクトしてるコンテナを削除して再度3.を実行してください。
 ※MySQLはOSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集してください。
 
 Laravel環境構築
@@ -15,22 +15,22 @@ Laravel環境構築
 4. php artisan key:generate
 5. php artisan migrate
 6. php artisan db:seed
-7. php artisan storage:link //storageの画像を使えるようにする
-8. composer require stripe/stripe-php //stripe SDKインストール
-9. ※windowsの場合 :
-     exitで抜けた後 sudo chmod -R 777 *
+7. php artisan storage:link                  //storageの画像を使えるようにする
+8. composer require stripe/stripe-php        //stripe SDKインストール
+9. exit
+10. ※windowsの場合 : sudo chmod -R 777 *
 11. ./set_stripe_key.sh
 
 テストアカウント
 1. TestUser1
-     ・ email: test_user1@example.com
-     ・ password: password
+     + email: test_user1@example.com
+     + password: password
 2. TestUser2
-     ・ email: test_user2@example.com
-     ・ password: password
+     + email: test_user2@example.com
+     + password: password
 
 
-UnitTest
+テスト準備
 1. docker-compose exec mysql bash
 2. mysql -u root -p
 3. パスワードはroot
@@ -49,6 +49,8 @@ UnitTest
 - php 8.1.33
 - Laravel 8.83.29
 - MySQL 8.0.26
+- MailHog
+- stripe
 
 ## ER図
 ![alt text](src/docs/fleamarket.png)
