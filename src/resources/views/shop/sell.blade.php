@@ -47,6 +47,7 @@
       <div class="form-group">
         <label>商品の状態</label>
         <select name="condition" required>
+          <option value=""  disabled selected hidden>選択してください</option>
           <option value=1>良好</option>
           <option value=2>目立った傷や汚れなし</option>
           <option value=3>やや傷や汚れあり</option>

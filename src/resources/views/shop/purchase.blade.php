@@ -22,7 +22,7 @@
             <div class="payment">
                 <h3>支払い方法</h3>
                 <select id="payment-select" name="payment">
-                    <option value="">選択してください</option>
+                    <option value=""  disabled selected hidden>選択してください</option>
                     <option value="1">クレジットカード</option>
                     <option value="2">コンビニ払い</option>
                 </select>

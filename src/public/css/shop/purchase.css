@@ -48,11 +48,6 @@
     margin: 0;
 }
 
-/* 支払い方法・配送先 */
-.payment-shipping {
-    margin-top: 20px;
-}
-
 .payment,
 .shipping {
     border-top: 1px solid #ccc;
@@ -69,6 +64,33 @@
     width: 250px;
     padding: 5px;
     font-size: 14px;
+}
+
+/* 開いたときのリスト部分を暗くする */
+select option {
+    background-color: #555;
+    /* ダークグレー背景 */
+    color: #fff;
+    /* 白文字 */
+}
+
+/* 選択中（ホバー中）の項目 */
+select option:checked,
+select option:hover {
+    background-color: #4a8cff;
+    /* 青い選択背景 */
+    color: #fff;
+}
+
+/* フォーカス時（枠が青く光る） */
+select:focus {
+    outline: 2px solid #4a8cff;
+    outline-offset: 2px;
+}
+
+/* 支払い方法・配送先 */
+.payment-shipping {
+    margin-top: 20px;
 }
 
 .shipping p {
