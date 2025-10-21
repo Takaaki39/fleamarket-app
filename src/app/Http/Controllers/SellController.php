@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\ItemCategory;
@@ -22,8 +21,7 @@ class SellController extends Controller
     public function store(ExhibitionRequest $request)
     {
         $path = null;
-        if ($request->hasFile('img_url')) 
-        {
+        if ($request->hasFile('img_url')) {
             $path = $request->file('img_url')->store('images/items', 'public');
         }
 
@@ -35,10 +33,9 @@ class SellController extends Controller
             'condition' => $request->condition,
             'img_url' => $path,
         ]);
-    
+
         $categories = json_decode($request->input('categories'), true) ?? [];
-        foreach ($categories as $categoryId) 
-        {
+        foreach ($categories as $categoryId) {
             ItemCategory::create([
                 'item_id'     => $item->id,
                 'category_id' => $categoryId,
@@ -51,9 +48,8 @@ class SellController extends Controller
             'user_id' => $user->id,
             'item_id' => $item->id
         ]);
-        
+
         // ItemControllerのindex()を呼び出す
         return redirect()->route('index')->with('success', '商品を出品しました！');
     }
-
 }

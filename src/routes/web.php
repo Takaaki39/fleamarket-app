@@ -6,9 +6,6 @@ use App\Http\Controllers\MypageController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\StripeWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +30,6 @@ Route::prefix('purchase')->group(function () {
     Route::post('/{item_id}', [PurchaseController::class, 'pay'])->name('purchase.pay');
     Route::get('/success', [PurchaseController::class, 'success'])->name('purchase.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
-
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -49,7 +45,7 @@ Route::prefix('email')->group(function () {
     Route::get('/verify/{id}/{hash}', [AuthController::class, 'auth'])
         ->middleware(['auth', 'signed'])
         ->name('verification.verify');
-        
+
     // メール認証待ち画面
     Route::get('/verify', [AuthController::class, 'wait'])
         ->middleware('auth')

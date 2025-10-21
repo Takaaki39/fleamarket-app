@@ -3,18 +3,12 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
-use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
-use App\Http\Requests\LoginRequest;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -41,7 +35,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
-        
+
         Fortify::registerView(function () {
             return view('auth.register');
         });
@@ -61,7 +55,7 @@ class FortifyServiceProvider extends ServiceProvider
             public function toResponse($request)
             {
                 // メール認証へリダイレクト
-                return redirect()->route('verification.notice'); 
+                return redirect()->route('verification.notice');
             }
         });
 
@@ -69,8 +63,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function ($request) {
             $user = User::where('email', $request->email)->first();
 
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
+            if (
+                $user &&
+                Hash::check($request->password, $user->password)
+            ) {
 
                 // メール未認証の場合はログインさせない
                 if (is_null($user->email_verified_at)) {

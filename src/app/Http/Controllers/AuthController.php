@@ -10,18 +10,19 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class AuthController extends Controller
 {
-    public function auth(EmailVerificationRequest $request) 
+    public function auth(EmailVerificationRequest $request)
     {
         $request->fulfill(); // メールアドレス認証完了
         return redirect('/mypage/profile')->with('success', 'メール認証が完了しました！');
     }
 
-    public function wait() 
+    public function wait()
     {
         return view('auth.verify-email');
     }
 
-    public function resending(Request $request) {
+    public function resending(Request $request)
+    {
         $request->user()->sendEmailVerificationNotification();
         return redirect('/email/verify')->with('success', '認証メールを再送しました！');
     }
@@ -38,12 +39,11 @@ class AuthController extends Controller
         ]);
 
         $user = Auth::user();
-        $savedCode = Cache::get('verify_code_'.$user->id);
+        $savedCode = Cache::get('verify_code_' . $user->id);
 
-        if ($savedCode && $savedCode === $request->verify_code) 
-        {
+        if ($savedCode && $savedCode === $request->verify_code) {
             $user->markEmailAsVerified();
-            Cache::forget('verify_code_'.$user->id);
+            Cache::forget('verify_code_' . $user->id);
             return redirect('/mypage/profile')->with('success', 'メール認証が完了しました！');
         }
 

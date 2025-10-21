@@ -10,7 +10,6 @@ use App\Http\Requests\AddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
-use Stripe\Event;
 
 class PurchaseController extends Controller
 {
@@ -28,8 +27,7 @@ class PurchaseController extends Controller
             'building' => $user->building,
         ];
 
-        if (session()->has('delivery')) 
-        {
+        if (session()->has('delivery')) {
             $delivery = session('delivery');
         }
         session(['delivery' => $delivery]);
@@ -53,7 +51,7 @@ class PurchaseController extends Controller
             'building' => $request->building,
         ];
         session(['delivery' => $delivery]);
-        
+
         return redirect()->route('purchase.index', ['item_id' => $item_id]);
     }
 
@@ -79,8 +77,8 @@ class PurchaseController extends Controller
 
         // Stripe Checkout セッション作成
         $session = Session::create([
-            'payment_method_types' => 
-                $paymentMethod === '1' ? ['card'] : ['konbini'],
+            'payment_method_types' =>
+            $paymentMethod === '1' ? ['card'] : ['konbini'],
             'line_items' => [[
                 'price_data' => [
                     'currency' => 'jpy',
@@ -94,7 +92,7 @@ class PurchaseController extends Controller
             'mode' => 'payment',
             'success_url' => route('purchase.success'),
             'cancel_url' => route('purchase.cancel'),
-            
+            'customer_email' => $user->email,
             // Webhookで特定できるようmetadataにpurchase_idを渡す
             'metadata' => [
                 'purchase_id' => $item_id,
@@ -110,7 +108,7 @@ class PurchaseController extends Controller
     {
         return view('shop.success');
     }
-    
+
     public function cancel()
     {
         return view('shop.cancel');
