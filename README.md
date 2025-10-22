@@ -17,8 +17,10 @@ Laravel環境構築
 4. php artisan key:generate
 5. php artisan migrate
 6. php artisan db:seed
-7. php artisan storage:link                  //storageの画像を使えるようにする
-8. composer require stripe/stripe-php        //stripe SDKインストール
+   //storageの画像を使えるようにする
+7. php artisan storage:link
+   //stripe SDKインストール
+8. composer require stripe/stripe-php
 9. exit
 10. ※windowsの場合 : sudo chmod -R 777 *
 11. ./set_stripe_key.sh
