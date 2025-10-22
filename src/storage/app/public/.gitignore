@@ -1,2 +1,9 @@
 *
+!images/
+!images/icons/
+!images/items/
+!images/logo.svg
+!images/balloon.png
+!images/star_filled.png
+!images/star.png
 !.gitignore
