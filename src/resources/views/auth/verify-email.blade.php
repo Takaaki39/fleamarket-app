@@ -7,10 +7,10 @@
 @section('content')
 <main class="verify-container">
     <div class="verify-wrapper">
-        <h2 class="verify-message">
+        <h1 class="verify-message">
             登録していただいたメールアドレスに認証メールを送付しました。<br>
             メール認証を完了してください。
-        </h2>
+        </h1>
 
         <a href="{{ route('verification.manual') }}" class="verify-button">認証はこちらから</a>
 

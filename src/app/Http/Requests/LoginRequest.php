@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 

@@ -13,7 +13,7 @@
                 <img src="{{ asset('storage/' . $user->icon_img) }}" alt="プロフィール画像">
             @endif
         </div>
-        <h2 class="username">{{$user->name}}</h2>
+        <h1 class="username">{{$user->name}}</h1>
         <a class="edit-btn" href="{{ route('mypage.edit') }}">
             プロフィールを編集
         </a>

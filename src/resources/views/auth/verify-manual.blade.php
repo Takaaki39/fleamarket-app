@@ -7,7 +7,7 @@
 @section('content')
 <main class="manual-verify-container">
     <div class="manual-verify-wrapper">
-        <h2 class="manual-verify-title">メール認証コードを入力してください</h2>
+        <h1 class="manual-verify-title">メール認証コードを入力してください</h1>
 
         <form method="POST" action="{{ route('verification.manual.verify') }}" novalidate>
             @csrf

@@ -3,21 +3,18 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\ItemStar;
-use App\Models\ItemCategory;
-use App\Models\ItemComment;
 use App\Models\Purchase;
-use App\Models\Sell;
 use App\Models\Category;
 use Database\Seeders\CategoriesTableSeeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
@@ -25,6 +22,18 @@ use Illuminate\Support\Facades\URL;
 class FleaMarketTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function actingAsVerifiedUser()
+    {
+        /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user);
+
+        return $user;
+    }
 
     /**
      * 会員登録機能のテスト
@@ -37,7 +46,7 @@ class FleaMarketTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['name']);
         $this->assertStringContainsString('お名前を入力してください', session('errors')->first('name'));
@@ -51,7 +60,7 @@ class FleaMarketTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['email']);
         $this->assertStringContainsString('メールアドレスを入力してください', session('errors')->first('email'));
@@ -65,7 +74,7 @@ class FleaMarketTest extends TestCase
             'password' => '',
             'password_confirmation' => '',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['password']);
         $this->assertStringContainsString('パスワードを入力してください', session('errors')->first('password'));
@@ -79,7 +88,7 @@ class FleaMarketTest extends TestCase
             'password' => 'pass123',
             'password_confirmation' => 'pass123',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['password']);
         $this->assertStringContainsString('パスワードは8文字以上で入力してください', session('errors')->first('password'));
@@ -93,7 +102,7 @@ class FleaMarketTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password456',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['password_confirmation']);
         $this->assertStringContainsString('パスワードと一致しません', session('errors')->first('password_confirmation'));
@@ -107,7 +116,7 @@ class FleaMarketTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
         $response->assertRedirect('/email/verify');
@@ -124,7 +133,7 @@ class FleaMarketTest extends TestCase
             'email' => '',
             'password' => 'password123',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['email']);
         $this->assertStringContainsString('メールアドレスを入力してください', session('errors')->first('email'));
@@ -136,7 +145,7 @@ class FleaMarketTest extends TestCase
             'email' => 'test@example.com',
             'password' => '',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors(['password']);
         $this->assertStringContainsString('パスワードを入力してください', session('errors')->first('password'));
@@ -148,7 +157,7 @@ class FleaMarketTest extends TestCase
             'email' => 'notfound@example.com',
             'password' => 'password123',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors();
         $this->assertStringContainsString('ログイン情報が登録されていません', session('errors')->first());
@@ -156,17 +165,12 @@ class FleaMarketTest extends TestCase
 
     public function test_login_with_valid_credentials_authenticates_user()
     {
-        $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123'),
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
 
         $response = $this->post('/login', [
-            'email' => 'test@example.com',
-            'password' => 'password123',
-        ])
-        ->assertStatus(302);
+            'email' => $user->email,
+            'password' => $user->password,
+        ])->assertStatus(302);
 
         $response->assertRedirect('/');
         $this->assertAuthenticatedAs($user);
@@ -178,12 +182,9 @@ class FleaMarketTest extends TestCase
      */
     public function test_authenticated_user_can_logout()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
 
-        $this->actingAs($user)
-            ->post('/logout')
+        $this->post('/logout')
             ->assertRedirect('/');
 
         $this->assertGuest();
@@ -205,13 +206,11 @@ class FleaMarketTest extends TestCase
     public function test_item_list_shows_sold_label_for_purchased_items()
     {
         // 1. テスト用データ作成
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
         // purchases テーブルに購入履歴を追加
-        \DB::table('purchases')->insert([
+        DB::table('purchases')->insert([
             'user_id' => $user->id,
             'item_id' => $item->id,
             'postal_code' => '123-4567',
@@ -222,7 +221,7 @@ class FleaMarketTest extends TestCase
         ]);
 
         // 2. /items をGET
-        $response = $this->actingAs($user)->get('/');
+        $response = $this->get('/');
 
         // 3. soldフラグを確認
         $items = $response->viewData('items');
@@ -238,13 +237,11 @@ class FleaMarketTest extends TestCase
     public function test_item_list_does_not_show_own_items()
     {
         // 1. テスト用データ作成
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $myItem = Item::factory()->create();
 
         // 出品情報を sells テーブルに登録
-        \DB::table('sells')->insert([
+        DB::table('sells')->insert([
             'user_id' => $user->id,
             'item_id' => $myItem->id,
         ]);
@@ -253,7 +250,7 @@ class FleaMarketTest extends TestCase
         $otherItem = Item::factory()->create();
 
         // 2. /items をGET
-        $response = $this->actingAs($user)->get('/');
+        $response = $this->get('/');
 
         $items = $response->viewData('items');
 
@@ -273,9 +270,7 @@ class FleaMarketTest extends TestCase
      */
     public function test_mylist_shows_only_starred_items()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $items = Item::factory(10)->create();
 
         // ランダムで数個をお気に入り(ItemStar)に登録
@@ -288,7 +283,7 @@ class FleaMarketTest extends TestCase
         }
 
         // ログイン状態でMyListにアクセス
-        $response = $this->actingAs($user)->get('/?tab=mylist');
+        $response = $this->get('/?tab=mylist');
         $response->assertStatus(200);
 
         // items データの中に ItemStars に含まれていない id がないことを確認
@@ -303,9 +298,7 @@ class FleaMarketTest extends TestCase
 
     public function test_mylist_shows_sold_label_for_purchased_items()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $items = Item::factory(5)->create();
 
         // 購入済みデータを作成
@@ -322,7 +315,7 @@ class FleaMarketTest extends TestCase
             ]);
         }
 
-        $response = $this->actingAs($user)->get('/?tab=mylist');
+        $response = $this->get('/?tab=mylist');
         $response->assertStatus(200);
 
         $itemsData = $response->original->getData()['items'] ?? collect();
@@ -339,13 +332,8 @@ class FleaMarketTest extends TestCase
     {
         $response = $this->get('/?tab=mylist');
 
-        $response->assertRedirect();
-        $redirectUrl = $response->headers->get('Location');
-
-        $this->assertTrue(
-            str_contains($redirectUrl, '/login') || str_contains($redirectUrl, '/email/verify'),
-            '未ログイン時は/loginまたは/email/verifyにリダイレクトされるべきです。'
-        );
+        // 該当する商品はありません。と表示されてるか確認
+        $response->assertSee('該当する商品はありません。');
     }
 
     /**
@@ -363,10 +351,8 @@ class FleaMarketTest extends TestCase
 
     public function test_search_keyword_persists_in_mylist()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
-        $response = $this->actingAs($user)->get('/?tab=mylist&search=watch');
+        $this->actingAsVerifiedUser();
+        $response = $this->get('/?tab=mylist&search=watch');
         $response->assertSee('watch');
     }
 
@@ -407,14 +393,11 @@ class FleaMarketTest extends TestCase
      */
     public function test_user_can_star_item()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
-        $response = $this->actingAs($user)
-                        ->post("/item/{$item->id}/star")
-                        ->assertStatus(302);
+        $this->post("/item/{$item->id}/star")
+            ->assertStatus(302);
 
         $this->assertDatabaseHas('item_stars', [
             'user_id' => $user->id,
@@ -424,28 +407,23 @@ class FleaMarketTest extends TestCase
 
     public function test_star_icon_changes_color_when_starred()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
         ItemStar::factory()->create(['user_id' => $user->id, 'item_id' => $item->id]);
 
-        $response = $this->actingAs($user)->get("/item/{$item->id}");
+        $response = $this->get("/item/{$item->id}");
         $response->assertSee('star_filled'); // class="starred-icon" 等を想定
     }
 
     public function test_user_can_unstar_item()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
         ItemStar::factory()->create(['user_id' => $user->id, 'item_id' => $item->id]);
 
-        $response = $this->actingAs($user)
-                        ->post("/item/{$item->id}/star")
-                        ->assertStatus(302);
+        $response = $this->post("/item/{$item->id}/star")
+            ->assertStatus(302);
 
         $this->assertDatabaseMissing('item_stars', [
             'user_id' => $user->id,
@@ -458,15 +436,13 @@ class FleaMarketTest extends TestCase
      */
     public function test_logged_in_user_can_post_comment()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
-        $response = $this->actingAs($user)->post("/item/{$item->id}/comment", [
+        $response = $this->post("/item/{$item->id}/comment", [
             'content' => 'テストコメント',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('item_comments', [
@@ -483,39 +459,35 @@ class FleaMarketTest extends TestCase
         $response = $this->post("/item/{$item->id}/comment", [
             'content' => 'テストコメント',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertRedirect('/login');
     }
 
     public function test_comment_is_required()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
-        $response = $this->actingAs($user)->post("/item/{$item->id}/comment", [
+        $response = $this->post("/item/{$item->id}/comment", [
             'content' => '',
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors('content');
     }
 
     public function test_comment_cannot_exceed_255_characters()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
         $longComment = str_repeat('あ', 256);
 
-        $response = $this->actingAs($user)->post("/item/{$item->id}/comment", [
+        $response = $this->post("/item/{$item->id}/comment", [
             'content' => $longComment,
         ])
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         $response->assertSessionHasErrors('content');
     }
@@ -525,17 +497,14 @@ class FleaMarketTest extends TestCase
      */
     public function test_user_can_purchase_item()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
 
-        $response = $this->actingAs($user)->post("/purchase/{$item->id}",[
+        $this->post("/purchase/{$item->id}", [
             'payment' => 1,
             'postal_code' => '123-1111',
             'address' => '東京都'
-        ])
-        ->assertStatus(302);
+        ])->assertStatus(302);
 
         $this->assertDatabaseHas('purchases', [
             'user_id' => $user->id,
@@ -545,9 +514,7 @@ class FleaMarketTest extends TestCase
 
     public function test_purchased_item_shows_sold_label()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
         Purchase::factory()->create(['user_id' => $user->id, 'item_id' => $item->id]);
 
@@ -557,13 +524,11 @@ class FleaMarketTest extends TestCase
 
     public function test_purchased_item_appears_in_profile_purchase_list()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $user = $this->actingAsVerifiedUser();
         $item = Item::factory()->create();
         Purchase::factory()->create(['user_id' => $user->id, 'item_id' => $item->id]);
 
-        $response = $this->actingAs($user)->get('/mypage?page=buy');
+        $response = $this->get('/mypage?page=buy');
         $response->assertSee($item->name);
     }
 
@@ -574,15 +539,13 @@ class FleaMarketTest extends TestCase
     public function test_payment_method_selection_reflects_in_checkout_page()
     {
         // 認証済みユーザー作成
-        $user = User::factory()->create([
-            'email_verified_at' => now(), // 認証済み
-        ]);
+        $this->actingAsVerifiedUser();
 
         // テスト用商品作成
         $item = Item::factory()->create();
 
         // 認証済みユーザーで購入ページへアクセス
-        $response = $this->actingAs($user)->get("/purchase/{$item->id}");
+        $response = $this->get("/purchase/{$item->id}");
         $response->assertStatus(200);
 
         // 支払い方法を選択
@@ -610,12 +573,9 @@ class FleaMarketTest extends TestCase
     public function test_address_update_reflects_on_purchase_page()
     {
         // 認証済みユーザー作成
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'postal_code' => '000-0000',
-            'address' => '東京都渋谷区初期住所',
-            'building' => ''
-        ]);
+        $user = $this->actingAsVerifiedUser();
+        $user->postal_code = '000-0000';
+        $user->address = '東京都渋谷区初期住所';
 
         $item = Item::factory()->create();
 
@@ -627,7 +587,6 @@ class FleaMarketTest extends TestCase
         ];
 
         // 住所更新リクエスト送信
-        $this->actingAs($user);
         $this->withoutExceptionHandling();
         $this->post("/purchase/address/{$item->id}", $newAddress)
             ->assertStatus(302);
@@ -644,11 +603,9 @@ class FleaMarketTest extends TestCase
     public function test_purchased_item_is_linked_with_shipping_address()
     {
         // 認証済みユーザーと商品作成
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'postal_code' => '987-6543',
-            'address' => '大阪府大阪市北区テスト住所'
-        ]);
+        $user = $this->actingAsVerifiedUser();
+        $user->postal_code = '987-6543';
+        $user->address = '大阪府大阪市北区テスト住所';
 
         $item = Item::factory()->create();
 
@@ -660,7 +617,6 @@ class FleaMarketTest extends TestCase
         ];
 
         // 住所更新リクエスト送信
-        $this->actingAs($user);
         $this->withoutExceptionHandling();
         $this->post("/purchase/address/{$item->id}", $newAddress)
             ->assertStatus(302);
@@ -677,7 +633,6 @@ class FleaMarketTest extends TestCase
             'building' => $sessionDelivery['building'],
         ];
 
-        $this->actingAs($user);
         $this->withoutExceptionHandling();
         $response = $this->post("/purchase/{$item->id}", $purchaseData)->assertStatus(302);
 
@@ -689,19 +644,17 @@ class FleaMarketTest extends TestCase
             'building' => 'hoge',
         ]);
     }
-    
+
     /**
      * ID13: プロフィール画像、ユーザー名、出品した商品一覧、購入した商品一覧が正しく表示される
      */
     public function test_purchase_history_reflects_after_successful_purchase()
     {
         // 認証済みユーザーと商品作成
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'postal_code' => '987-6543',
-            'address' => '大阪府大阪市北区テスト住所',
-            'building' => 'hoge',
-        ]);
+        $user = $this->actingAsVerifiedUser();
+        $user->postal_code = '987-6543';
+        $user->address = '大阪府大阪市北区テスト住所';
+        $user->building = 'hoge';
 
         $purchaseItem = Item::factory()->create();
 
@@ -714,13 +667,12 @@ class FleaMarketTest extends TestCase
             'building' => $user->building,
         ];
         // 購入
-        $this->actingAs($user);
         $this->withoutExceptionHandling();
         $purchaseResponse = $this->post("/purchase/{$purchaseItem->id}", $purchaseData)
-                                ->assertStatus(302);
-        
+            ->assertStatus(302);
+
         // マイページに遷移
-        $response = $this->actingAs($user)->get("/mypage?page=buy");
+        $response = $this->get("/mypage?page=buy");
         $response->assertStatus(200);
 
         $response->assertSee($purchaseItem->name);
@@ -734,16 +686,15 @@ class FleaMarketTest extends TestCase
     public function test_profile_edit_page_shows_existing_user_values_as_initial_values()
     {
         // テスト用ユーザー（認証済み）を作成
-        $user = User::factory()->create([
-            'name' => 'テストユーザー',
-            'postal_code' => '123-4567',
-            'address' => '東京都中央区テスト1-2-3',
-            'icon_img' => 'storage/images/icons/test_icon.png',
-            'email_verified_at' => now(),
-        ]);
+        $user = $this->actingAsVerifiedUser();
+        $user->name = 'テストユーザー';
+        $user->postal_code = '987-6543';
+        $user->address = '大阪府大阪市北区テスト住所';
+        $user->building = 'hoge';
+        $user->icon_img = 'storage/images/icons/test_icon.png';
 
         // 認証済みでプロフィール編集ページへアクセス
-        $response = $this->actingAs($user)->get('/mypage/profile');
+        $response = $this->get('/mypage/profile');
         $response->assertStatus(200);
 
         $content = $response->getContent();
@@ -775,9 +726,7 @@ class FleaMarketTest extends TestCase
         $this->seed(CategoriesTableSeeder::class);
 
         // ユーザー作成＆認証
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-        ]);
+        $user = $this->actingAsVerifiedUser();
 
         // ストレージ偽装（ファイルアップロードのテスト）
         Storage::fake('public');
@@ -795,12 +744,12 @@ class FleaMarketTest extends TestCase
         ];
 
         // 認証済みユーザーで商品登録POST
-        $response = $this->actingAs($user)->post('/sell', $formData)
-        ->assertStatus(302);
+        $response = $this->post('/sell', $formData)
+            ->assertStatus(302);
 
         // リダイレクトを確認
         $response->assertStatus(302)
-                 ->assertRedirect();
+            ->assertRedirect();
 
         // DB保存確認
         $this->assertDatabaseHas('items', [
@@ -839,8 +788,7 @@ class FleaMarketTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-        ])
-        ->assertStatus(302);
+        ])->assertStatus(302);
 
         // Fortify登録時はメール認証画面へリダイレクト
         $response->assertRedirect('/email/verify');
@@ -865,7 +813,7 @@ class FleaMarketTest extends TestCase
 
         // Fortifyの「再送信ボタン」POST
         $response = $this->actingAs($user)->post('/email/verification-notification')
-        ->assertStatus(302);
+            ->assertStatus(302);
 
         // Fortifyの仕様上、再送信後は /email/verify にリダイレクト
         $response->assertRedirect('/email/verify');

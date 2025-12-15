@@ -7,7 +7,7 @@
 @section('content')
 <div class="content">
     <div class="message">
-        <h2>支払いがキャンセルされました。</h2>
+        <h1>支払いがキャンセルされました。</h1>
         <a href="/">トップに戻る</a>
     </div>
 </div>

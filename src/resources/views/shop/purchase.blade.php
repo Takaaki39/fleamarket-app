@@ -13,23 +13,23 @@
                 <img src="{{ $item->img_url }}" alt="商品画像" class="product-image">
             </div>
             <div class="product-details">
-                <h2 class="product-name">{{$item->name}}</h2>
+                <p class="product-name">{{$item->name}}</p>
                 <p class="product-price">¥{{$item->price_label}}</p>
             </div>
         </section>
 
         <section class="payment-shipping">
             <div class="payment">
-                <h3>支払い方法</h3>
+                <p class="payment-label">支払い方法</p>
                 <select id="payment-select" name="payment">
-                    <option value=""  disabled selected hidden>選択してください</option>
+                    <option value="" disabled selected hidden>選択してください</option>
                     <option value="1">クレジットカード</option>
                     <option value="2">コンビニ払い</option>
                 </select>
             </div>
 
             <div class="shipping">
-                <h3>配送先</h3>
+                <p class="payment-label">配送先</p>
                 <p>〒 {{$delivery['postal_code']}}<br>{{ $delivery['address'] .' '. $delivery['building'] }}</p>
                 <a href="{{ route('purchase.address.edit', $item->id) }}" class="change-link">変更する</a>
             </div>
@@ -55,10 +55,10 @@
                 </tr>
             </table>
             @error('payment')
-                <p class="error">{{ $message }}</p>
+            <p class="error">{{ $message }}</p>
             @enderror
             @error('address')
-                <p class="error">{{ $message }}</p>
+            <p class="error">{{ $message }}</p>
             @enderror
             <button id="buy-btn" class="buy-btn" type="submit">購入する</button>
         </form>

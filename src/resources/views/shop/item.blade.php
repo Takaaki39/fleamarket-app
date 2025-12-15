@@ -16,7 +16,7 @@
 
     <!-- 右側 詳細 -->
     <div class="detail-area">
-        <h2 class="product-title">{{$item->name}}</h2>
+        <h1 class="product-title">{{$item->name}}</h1>
         <p class="brand">{{$item->brand_name}}</p>
         <p class="price">¥{{$item->price_label}} <span>(税込)</span></p>
 
@@ -45,12 +45,12 @@
         </a>
 
         <section class="description">
-            <h3>商品説明</h3>
+            <h2>商品説明</h2>
             <p>{{$item->description}}</p>
         </section>
 
         <section class="info">
-            <h3>商品の情報</h3>
+            <h2>商品の情報</h2>
             <p>カテゴリー：
                 @foreach($item->categories as $category)
                     <span class="tag">{{$category->category_name}}</span>    
@@ -60,7 +60,7 @@
         </section>
 
         <section class="comments">
-            <h3>コメント({{$item->comment_count}})</h3>
+            <h2>コメント({{$item->comment_count}})</h2>
             @foreach($item->comments as $comment) 
                 <div class="comment">
                     <div class="comment-header">
@@ -77,7 +77,7 @@
                 </div>
             @endforeach
 
-            <h4>商品へのコメント</h4>
+            <h2>商品へのコメント</h2>
             <form action="{{ route('items.comment', $item->id) }}" method="POST" novalidate>
                 @csrf
                 <textarea name="content"></textarea>

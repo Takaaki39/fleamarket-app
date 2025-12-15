@@ -107,6 +107,7 @@
 }
 
 input[type="text"],
+input[type="number"],
 textarea,
 select {
     width: 100%;

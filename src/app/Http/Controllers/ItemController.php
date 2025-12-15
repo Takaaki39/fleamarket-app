@@ -21,34 +21,30 @@ class ItemController extends Controller
 
         // 自分が出品した商品の item_id 一覧を取得
         $mySellItemIds = [];
-        if (auth()->check()) 
-        {
+        if (auth()->check()) {
             $mySellItemIds = Sell::where('user_id', auth()->id())->pluck('item_id')->toArray();
         }
 
         // 検索ワード
         $search = $request->input('search');
 
-        if ($request->tab === 'mylist') 
-        {
-            if (!auth()->check()) 
-            {
-                return redirect()->route('login');
-            }
-            // マイリスト（お気に入り）
-            $items = Item::whereIn('id', function ($query) {
+        if ($request->tab === 'mylist') {
+            if (!auth()->check()) {
+                $items = collect(); // 空のコレクションを返す
+            } else {
+                // マイリスト（お気に入り）
+                $items = Item::whereIn('id', function ($query) {
                     $query->select('item_id')
                         ->from('item_stars')
                         ->where('user_id', auth()->id());
                 })
-                ->whereNotIn('id', $mySellItemIds) // 自分の出品物を除外
-                ->when($search, function ($query, $search) {
-                    return $query->where('name', 'like', "%{$search}%");
-                })
-                ->get();
-        } 
-        else 
-        {
+                    ->whereNotIn('id', $mySellItemIds) // 自分の出品物を除外
+                    ->when($search, function ($query, $search) {
+                        return $query->where('name', 'like', "%{$search}%");
+                    })
+                    ->get();
+            }
+        } else {
             // おすすめ（全商品）
             $items = Item::whereNotIn('id', $mySellItemIds)
                 ->when($search, function ($query, $search) {
@@ -58,8 +54,7 @@ class ItemController extends Controller
         }
 
         // sold フラグを設定（item.id が purchases.item_id に含まれていたら true）
-        foreach ($items as $item) 
-        {
+        foreach ($items as $item) {
             $item->sold = in_array($item->id, $soldItemIds);
         }
 
@@ -75,16 +70,13 @@ class ItemController extends Controller
     public function star($item_id)
     {
         $star = ItemStar::where('user_id', Auth::id())
-                        ->where('item_id', $item_id)
-                        ->first();
+            ->where('item_id', $item_id)
+            ->first();
 
-        if ($star)
-        {
+        if ($star) {
             // すでにスターしていたら解除
             $star->delete();
-        } 
-        else 
-        {
+        } else {
             // スターしていなければ追加
             ItemStar::create([
                 'user_id' => Auth::id(),
@@ -97,12 +89,11 @@ class ItemController extends Controller
     public function comment(CommentRequest $request, $item_id)
     {
         ItemComment::create([
-                'user_id' => Auth::id(),
-                'item_id' => $item_id,
-                'content' => $request->input('content'),
-            ]);
+            'user_id' => Auth::id(),
+            'item_id' => $item_id,
+            'content' => $request->input('content'),
+        ]);
 
         return redirect()->route('item.show', $item_id)->with('success', 'コメントを投稿しました。');
     }
-
 }
