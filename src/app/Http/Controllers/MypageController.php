@@ -22,16 +22,16 @@ class MypageController extends Controller
         } else if ($request->page === 'buy') {
             $items = $user->purchasedItems()->with('purchases')->get();
         } else {
-            $transactions = $user->allTransactions()->get();
+            $transactions = $user->allTransactions();
         }
 
         // 平均評価（小数）
         $averageRating = Evaluation::where('user_id', $user->id)
             ->avg('rating');
 
-        // 表示用（切り捨て）
+        // 表示用（四捨五入）
         $displayRating = $averageRating
-            ? floor($averageRating)
+            ? round($averageRating)
             : 0;
 
         return view('profile/mypage', compact('user', 'items', 'transactions', 'displayRating'));

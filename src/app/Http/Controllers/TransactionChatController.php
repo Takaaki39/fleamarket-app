@@ -27,6 +27,10 @@ class TransactionChatController extends Controller
         $transaction = Transaction::where('item_id', $item->id)
             ->where('customer_id', $user->id)
             ->first();
+        if ($transaction->status === 2) {
+            $transaction->status = 0;
+            $transaction->save();
+        }
 
         $seller = Sell::where('item_id', $item->id)->first();
 
@@ -54,13 +58,13 @@ class TransactionChatController extends Controller
 
         // sellsテーブルのitem_idが$item_idと一致するデータを取得
         $sells = Sell::where('item_id', $item->id)->first();
+        $transactions = $user->allTransactions();
+
         if ($sells->user_id === $user->id) {
             // 出品者
-            $transactions = Transaction::where('user_id', $user->id)->get();
             $is_customer = false;
         } else {
             // 購入者
-            $transactions = Transaction::where('customer_id', $user->id)->get();
             $is_customer = true;
         }
 

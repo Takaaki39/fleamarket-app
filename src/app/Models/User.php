@@ -83,7 +83,7 @@ class User extends Authenticatable  implements MustVerifyEmail
     public function customerTransactions()
     {
         // statusが0のものを取得
-        return $this->hasMany(Transaction::class, 'customer_id')->where('status', '==', 0);
+        return $this->hasMany(Transaction::class, 'customer_id')->where('status', 0);
     }
 
     /**
@@ -91,7 +91,20 @@ class User extends Authenticatable  implements MustVerifyEmail
      */
     public function allTransactions()
     {
-        return $this->transactions()->union($this->customerTransactions());
+        // 新規メッセージが来た順にする
+        return Transaction::with(['chats' => function ($q) {
+            $q->latest();
+        }])
+            ->where(function ($q) {
+                $q->where('user_id', $this->id)
+                    ->orWhere('customer_id', $this->id);
+            })
+            ->where('status', '!=', 2)
+            ->get()
+            ->sortByDesc(function ($transaction) {
+                return optional($transaction->chats->first())->created_at;
+            })
+            ->values();
     }
 
     public function transactionChats()

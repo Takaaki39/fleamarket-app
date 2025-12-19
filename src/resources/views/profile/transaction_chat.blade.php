@@ -10,7 +10,6 @@
     <!-- サイドバー -->
     <aside class="sidebar">
         <h1 class="sidebar-title">その他の取引</h1>
-        @if($is_customer === false)
         <ul class="product-list">
             @foreach($transactions as $element)
             <li>
@@ -23,7 +22,6 @@
             </li>
             @endforeach
         </ul>
-        @endif
     </aside>
 
     <!-- メイン -->
