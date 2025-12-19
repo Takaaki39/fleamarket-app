@@ -14,7 +14,7 @@
 
         <a href="{{ route('verification.manual') }}" class="verify-button">認証はこちらから</a>
 
-        <form method="POST" action="{{ route('verification.send') }}">
+        <form method="POST" action="{{ route('verification.send') }}" novalidate>
             @csrf
             <button type="submit" class="resend-link">認証メールを再送する</button>
         </form>

@@ -1,0 +1,384 @@
+.container {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+/* サイドバー */
+.sidebar {
+    width: 240px;
+    background: #9c9c9c;
+    padding: 20px;
+    text-align: center;
+}
+
+.sidebar-title {
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-list {
+    list-style: none;
+}
+
+.product-list li {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.progress-link {
+    display: block;
+    text-decoration: none;
+    color: #000;
+    background: #fff;
+    border-radius: 4px;
+}
+
+.progress-link:hover {
+    background: #eee;
+}
+
+.progress-link.active {
+    font-weight: bold;
+}
+
+/* メイン */
+.main {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    /* ヘッダー分を引く */
+}
+
+/* 取引相手 */
+.transaction-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.transaction-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.complete-btn {
+    min-width: 120px;
+    height: 44px;
+    padding: 0 24px;
+
+    background: #ff8f8f;
+    /* 画像の色に近い */
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 9999px;
+    /* 完全な丸み */
+    cursor: pointer;
+
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+/* hover */
+.complete-btn:hover {
+    opacity: 0.85;
+}
+
+/* active（押した感） */
+.complete-btn:active {
+    transform: scale(0.96);
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background: #d9d9d9;
+    border-radius: 50%;
+    overflow: hidden;
+    /* はみ出しを隠す */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* ちょうど良く収める */
+}
+
+/* 商品情報 */
+.product-info {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+.product-image {
+    width: 180px;
+    height: 180px;
+    background: #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-detail h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.price {
+    font-size: 18px;
+}
+
+/* チャット */
+.chat-area {
+    flex: 1;
+    /* 残りの高さを全部使う */
+    overflow-y: auto;
+    /* 縦スクロール */
+    padding: 30px 0;
+}
+
+.chat-row {
+    display: flex;
+    margin-bottom: 30px;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.chat-row.left {
+    justify-content: flex-start;
+}
+
+.chat-row.right {
+    justify-content: flex-end;
+}
+
+.edit-textarea {
+    display: inline-block;
+    min-width: 60px;
+    max-width: 320px;
+    min-height: 40px;
+
+    padding: 8px 10px;
+    line-height: 1.4;
+
+    resize: none;
+    outline: none;
+    word-break: break-word;
+}
+
+.message-wrapper {
+    max-width: 320px;
+}
+
+.edit-actions {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.user-name {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.user-name.right {
+    text-align: right;
+}
+
+.message-box {
+    display: inline-block;
+    min-width: 60px;
+    max-width: 320px;
+    min-height: 40px;
+
+    background: #d9d9d9;
+    border-radius: 4px;
+
+    padding: 8px 10px;
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+.my-message {
+    padding-left: 10px;
+    line-height: 40px;
+}
+
+.message-actions {
+    text-align: right;
+    font-size: 12px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.action-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}
+
+.chat-image {
+    max-width: 200px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+/* 入力欄 */
+.chat-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+    flex: 1;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #aaa;
+}
+
+.image-btn {
+    display: block;
+    height: 40px;
+    padding: 5px 15px;
+    border: 2px solid #ff5a5a;
+    background: #fff;
+    color: #ff5a5a;
+    border-radius: 6px;
+    justify-content: center;
+}
+
+.send-btn {
+    height: 60px;
+    width: 60px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.send-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+
+    display: none;
+    /* 初期は非表示 */
+    align-items: center;
+    justify-content: center;
+}
+
+/* モーダル本体 */
+.complete-modal {
+    width: 700px;
+    background: #fffde8;
+    border-radius: 24px;
+}
+
+/* タイトル */
+.complete-modal h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    padding-left: 40px;
+}
+
+/* 区切り線 */
+.complete-modal hr {
+    border: none;
+    border-top: 2px solid #000;
+    margin: 20px 0;
+}
+
+/* テキスト */
+.modal-text {
+    font-size: 20px;
+    color: #888;
+    margin-bottom: 30px;
+    padding-left: 40px;
+}
+
+/* 星 */
+.stars {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 120px;
+    margin-bottom: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.stars span {
+    cursor: pointer;
+    color: #ddd;
+}
+
+.stars span.active {
+    color: #ffeb3b;
+}
+
+/* ボタン */
+.modal-actions {
+    text-align: right;
+    padding-bottom: 10px;
+    padding-right: 40px;
+}
+
+.modal-send {
+    background: #ff8f8f;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-send:hover {
+    opacity: 0.9;
+}

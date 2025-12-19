@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProfileRequest;
+use App\Models\Evaluation;
 
 class MypageController extends Controller
 {
@@ -13,16 +14,27 @@ class MypageController extends Controller
     {
         // 現在ログイン中のユーザー情報を取得
         $user = Auth::user();
-        
-        if ($request->page === 'buy') 
-        {
-            $items = $user->purchasedItems()->with('purchases')->get();
-        }
-        else
-        {
+
+        $items = [];
+        $progresses = [];
+        if ($request->page === null || $request->page === 'sell') {
             $items = $user->selledItems()->with('sells')->get();
+        } else if ($request->page === 'buy') {
+            $items = $user->purchasedItems()->with('purchases')->get();
+        } else {
+            $progresses = $user->allProgresses()->get();
         }
-        return view('profile/mypage', compact('user', 'items'));
+
+        // 平均評価（小数）
+        $averageRating = Evaluation::where('user_id', $user->id)
+            ->avg('rating');
+
+        // 表示用（切り捨て）
+        $displayRating = $averageRating
+            ? floor($averageRating)
+            : 0;
+
+        return view('profile/mypage', compact('user', 'items', 'progresses', 'displayRating'));
     }
 
     public function edit()
@@ -42,9 +54,8 @@ class MypageController extends Controller
         $user->building    = $request->input('building');
 
         // 画像アップロード処理
-        if ($request->hasFile('icon_img')) 
-        {
-            $path = $request->file('icon_img')->store('images/icons', 'public'); 
+        if ($request->hasFile('icon_img')) {
+            $path = $request->file('icon_img')->store('images/icons', 'public');
 
             $user->icon_img = $path;
         }

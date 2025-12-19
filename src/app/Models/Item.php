@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = ['name', 'price', 'brand_name', 'description', 'img_url', 'condition'];
 
     // {{ $item->condition_label }}で使う
@@ -28,7 +28,7 @@ class Item extends Model
     {
         return number_format($this->price);
     }
-    
+
     public function stars()
     {
         return $this->hasMany(ItemStar::class, 'item_id');
@@ -44,7 +44,7 @@ class Item extends Model
     {
         return $this->belongsToMany(Category::class, 'item_categories', 'item_id', 'category_id');
     }
-    
+
     public function comments()
     {
         return $this->hasmany(ItemComment::class, 'item_id');
@@ -59,10 +59,20 @@ class Item extends Model
     {
         return $this->hasMany(Purchase::class);
     }
-    
+
     public function sells()
     {
         return $this->hasMany(Sell::class);
+    }
+
+    public function progresse()
+    {
+        return $this->hasOne(Progress::class);
+    }
+
+    public function progresses()
+    {
+        return $this->hasMany(Progress::class);
     }
 
     // img_url のアクセサ
@@ -85,5 +95,4 @@ class Item extends Model
         // 念のためデフォルト
         return asset('storage/images/' . $value);
     }
-    
 }

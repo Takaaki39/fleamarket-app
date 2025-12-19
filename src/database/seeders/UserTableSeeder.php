@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder
             'building'          => ''
         ];
         DB::table('users')->insert($param);
-        
+
         $param = [
             'name'              => 'TestUser2',
             'email'             => 'test_user2@example.com',
@@ -34,6 +34,17 @@ class UserTableSeeder extends Seeder
             'postal_code'       => '222-1111',
             'address'           => '青森県八戸市白銀1-1-1',
             'building'          => '根城パレス201'
+        ];
+        DB::table('users')->insert($param);
+
+        $param = [
+            'name'              => 'TestUser3',
+            'email'             => 'test_user3@example.com',
+            'email_verified_at' => now(),
+            'password'          => Hash::make('password'),
+            'postal_code'       => '222-1111',
+            'address'           => '埼玉県坂戸市入西1-2-3',
+            'building'          => 'fleamarketマンション303'
         ];
         DB::table('users')->insert($param);
     }

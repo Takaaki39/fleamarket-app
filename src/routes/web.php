@@ -6,6 +6,7 @@ use App\Http\Controllers\MypageController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProgressChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,11 @@ Route::prefix('purchase')->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
+    Route::get('/progress_chat/{progress_id}', [ProgressChatController::class, 'progress'])->name('progress');
+    Route::post('/progress_chat/{progress_id}/chat', [ProgressChatController::class, 'chat'])->name('progress_chat');
+    Route::post('/progress_chat/{progress_id}/edit', [ProgressChatController::class, 'editChat'])->name('progress_chat.edit');
+    Route::post('/progress_chat/{progress_id}/delete', [ProgressChatController::class, 'deleteChat'])->name('progress_chat.delete');
+    Route::post('/progress_chat/{progress_id}/complete', [ProgressChatController::class, 'complete'])->name('progress.complete');
     Route::get('/sell', [SellController::class, 'create'])->name('sell.create');
     Route::post('/item/{item_id}/star', [ItemController::class, 'star'])->name('items.star');
     Route::post('/item/{item_id}/comment', [ItemController::class, 'comment'])->name('items.comment');

@@ -32,8 +32,26 @@
 .username {
     font-size: 36px;
     font-weight: bold;
-    white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* 名前＋評価 */
+.user-info {
+    display: flex;
+    flex-direction: column;
     margin-left: 100px;
+    align-self: flex-start;
+}
+
+/* 評価（星） */
+.rating {
+    margin-top: 8px;
+    font-size: 28px;
+    color: #ddd;
+}
+
+.rating span.active {
+    color: #ffcc00;
 }
 
 .edit-btn {
@@ -75,11 +93,29 @@
     text-decoration: none;
     color: #333;
     font-size: 18px;
+    position: relative;
 }
 
 .tab.active {
     color: red;
     font-weight: bold;
+}
+
+.all-unread-badge {
+    position: absolute;
+    top: 12px;
+    right: -12px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: red;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 商品カード */
@@ -92,7 +128,14 @@
     margin: 0 auto;
 }
 
+.product-card-link {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+
 .product-card {
+    position: relative;
     width: 100%;
     aspect-ratio: 290 / 320;
     /* 縦横比を維持して可変 */
@@ -110,6 +153,30 @@
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 未読バッジ */
+.unread-badge {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+
+    background: #ff3b30;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
 .product-image {

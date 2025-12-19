@@ -10,33 +10,71 @@
     <section class="profile">
         <div class="icon">
             @if($user->icon_img)
-                <img src="{{ asset('storage/' . $user->icon_img) }}" alt="プロフィール画像">
+            <img src="{{ asset('storage/' . $user->icon_img) }}" alt="プロフィール画像">
             @endif
         </div>
-        <h1 class="username">{{$user->name}}</h1>
+        <div class="user-info">
+            <h1 class="username">{{ $user->name }}</h1>
+
+            <div class="rating">
+                @for ($i = 1; $i <= 5; $i++)
+                    <span class="{{ $i <= $displayRating ? 'active' : '' }}">★</span>
+                    @endfor
+            </div>
+        </div>
         <a class="edit-btn" href="{{ route('mypage.edit') }}">
             プロフィールを編集
         </a>
     </section>
 
     <nav class="tabs">
-        <a 
-            href="{{ route('mypage', array_filter(['page' => 'sell'])) }}" 
-            class="tab {{ request('page') !== 'buy' ? 'active' : '' }}"
-        >出品した商品</a>
-        <a 
-            href="{{ route('mypage', array_filter(['page' => 'buy'])) }}" 
-            class="tab {{ request('page') === 'buy' ? 'active' : '' }}"
-        >購入した商品</a>
+        <a
+            href="{{ route('mypage', array_filter(['page' => 'sell'])) }}"
+            class="tab {{ request('page') === null ||request('page') === 'sell' ? 'active' : '' }}">
+            出品した商品
+        </a>
+        <a
+            href="{{ route('mypage', array_filter(['page' => 'buy'])) }}"
+            class="tab {{ request('page') === 'buy' ? 'active' : '' }}">
+            購入した商品
+        </a>
+        <a
+            href="{{ route('mypage', array_filter(['page' => 'progress'])) }}"
+            class="tab {{ request('page') === 'progress' ? 'active' : '' }}">
+            取引中の商品
+
+            @if(auth()->user()->unread_chats > 0)
+            <div class="all-unread-badge">
+                {{ auth()->user()->unread_chats > 99 ? '99+' : auth()->user()->unread_chats }}
+            </div>
+            @endif
+        </a>
     </nav>
 
     <section class="items">
-        @foreach($items as $item)
+        @if(request('page') === 'progress')
+        @foreach($progresses as $progress)
+        <a href="{{ route('progress', $progress->id) }}" class="product-card-link">
             <div class="product-card">
-                <img src="{{ $item->img_url }}" alt="商品画像" class="product-image">
-                <p class="product-name">{{$item->name}}</p>
+                {{-- 未読バッジ --}}
+                @if($progress->unreadCount > 0)
+                <div class="unread-badge">
+                    {{ $progress->unreadCount > 99 ? '99+' : $progress->unreadCount }}
+                </div>
+                @endif
+                <img src="{{ $progress->item->img_url }}" alt="商品画像" class="product-image">
+                <p class="product-name">{{$progress->item->name}}</p>
             </div>
+        </a>
         @endforeach
+        @else
+        @foreach($items as $item)
+        <div class="product-card">
+            <img src="{{ $item->img_url }}" alt="商品画像" class="product-image">
+            <p class="product-name">{{$item->name}}</p>
+        </div>
+        @endforeach
+        @endif
     </section>
 </main>
 @endsection

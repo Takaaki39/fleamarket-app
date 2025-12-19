@@ -22,13 +22,13 @@
 
         <div class="actions">
             <div class="action-item">
-                <form action="{{ route('items.star', $item->id) }}" method="POST">
+                <form action="{{ route('items.star', $item->id) }}" method="POST" novalidate>
                     @csrf
                     <button type="submit" class="star-btn">
                         @if($item->stars->contains('user_id', Auth::id()))
-                            <img src="{{ asset('storage/images/star_filled.png') }}" alt="star">
+                        <img src="{{ asset('storage/images/star_filled.png') }}" alt="star">
                         @else
-                            <img src="{{ asset('storage/images/star.png') }}" alt="star">
+                        <img src="{{ asset('storage/images/star.png') }}" alt="star">
                         @endif
                     </button>
                 </form>
@@ -53,7 +53,7 @@
             <h2>商品の情報</h2>
             <p>カテゴリー：
                 @foreach($item->categories as $category)
-                    <span class="tag">{{$category->category_name}}</span>    
+                <span class="tag">{{$category->category_name}}</span>
                 @endforeach
             </p>
             <p>商品の状態：{{$item->condition_label}}</p>
@@ -61,20 +61,20 @@
 
         <section class="comments">
             <h2>コメント({{$item->comment_count}})</h2>
-            @foreach($item->comments as $comment) 
-                <div class="comment">
-                    <div class="comment-header">
-                        <div class="icon">
-                            @if($comment->user->icon_img)
-                                <img src="{{ asset('storage/' . $comment->user->icon_img) }}" alt="プロフィール画像">
-                            @endif
-                        </div>
-                        <p class="user">{{$comment->user->name}}</p>
+            @foreach($item->comments as $comment)
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="icon">
+                        @if($comment->user->icon_img)
+                        <img src="{{ asset('storage/' . $comment->user->icon_img) }}" alt="プロフィール画像">
+                        @endif
                     </div>
-                    <div class="comment-body">
-                        <p class="text">{{$comment->content}}</p>
-                    </div>
+                    <p class="user">{{$comment->user->name}}</p>
                 </div>
+                <div class="comment-body">
+                    <p class="text">{{$comment->content}}</p>
+                </div>
+            </div>
             @endforeach
 
             <h2>商品へのコメント</h2>
@@ -82,7 +82,7 @@
                 @csrf
                 <textarea name="content"></textarea>
                 @error('content')
-                    <div class="error">{{ $message }}</div>
+                <div class="error">{{ $message }}</div>
                 @enderror
                 <button class="comment-btn">コメントを送信する</button>
             </form>
