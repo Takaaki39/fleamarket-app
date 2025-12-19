@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProgressChatsTable extends Migration
+class CreateTransactionChatsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateProgressChatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('progress_chats', function (Blueprint $table) {
+        Schema::create('transaction_chats', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('progress_id')
-                ->constrained('progresses')
+            $table->foreignId('transaction_id')
+                ->constrained('transactions')
                 ->cascadeOnDelete();
 
             $table->foreignId('user_id')
@@ -46,6 +46,6 @@ class CreateProgressChatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('progress_chats');
+        Schema::dropIfExists('transaction_chats');
     }
 }

@@ -5,19 +5,19 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Progress;
+use App\Models\Transaction;
 use App\Models\User;
 
 class TransactionCompletedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Progress $progress;
+    public Transaction $transaction;
     public User $buyer;
 
-    public function __construct(Progress $progress, User $buyer)
+    public function __construct(Transaction $transaction, User $buyer)
     {
-        $this->progress = $progress;
+        $this->transaction = $transaction;
         $this->buyer = $buyer;
     }
 

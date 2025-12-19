@@ -71,41 +71,32 @@ class User extends Authenticatable  implements MustVerifyEmail
         return $this->belongsToMany(Item::class, 'sells', 'user_id', 'item_id')->withTimestamps();
     }
 
-    public function progresses()
+    public function transactions()
     {
         // statusが2以外のものを取得
-        return $this->hasMany(Progress::class, 'user_id')->where('status', '!=', 2);
+        return $this->hasMany(Transaction::class, 'user_id')->where('status', '!=', 2);
     }
 
     /**
-     * idがProgressesテーブルのcustomer_idと一致するデータを取得
+     * idがTransactionsテーブルのcustomer_idと一致するデータを取得
      */
-    public function customerProgresses()
+    public function customerTransactions()
     {
         // statusが0のものを取得
-        return $this->hasMany(Progress::class, 'customer_id')->where('status', '==', 0);
+        return $this->hasMany(Transaction::class, 'customer_id')->where('status', '==', 0);
     }
 
     /**
-     * progressesとcustomerProgressesの両方を統合して取得
+     * transactionsとcustomerTransactionsの両方を統合して取得
      */
-    public function allProgresses()
+    public function allTransactions()
     {
-        return $this->progresses()->union($this->customerProgresses());
+        return $this->transactions()->union($this->customerTransactions());
     }
 
-    /**
-     * 取引中アイテム（progress テーブル経由）
-     */
-    public function progressItems()
+    public function transactionChats()
     {
-        // progresses テーブルが user_id / item_id を持つ想定
-        return $this->belongsToMany(Item::class, 'progresses', 'user_id', 'item_id')->withTimestamps();
-    }
-
-    public function progressChats()
-    {
-        return $this->hasMany(ProgressChat::class);
+        return $this->hasMany(TransactionChat::class);
     }
 
     public function evaluations()
@@ -118,9 +109,9 @@ class User extends Authenticatable  implements MustVerifyEmail
      */
     public function getUnreadChatsAttribute()
     {
-        return ProgressChat::where('is_read', false)
+        return TransactionChat::where('is_read', false)
             ->where('user_id', '!=', $this->id) // 相手のメッセージのみ
-            ->whereHas('progress', function ($query) {
+            ->whereHas('transaction', function ($query) {
                 $query->where('user_id', $this->id)
                     ->orWhere('customer_id', $this->id);
             })

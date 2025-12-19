@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Progress extends Model
+class Transaction extends Model
 {
     use HasFactory;
-    protected $table = 'progresses';
+    protected $table = 'transactions';
 
     protected $fillable = [
         'item_id',
@@ -30,7 +29,7 @@ class Progress extends Model
 
     public function chats()
     {
-        return $this->hasMany(ProgressChat::class);
+        return $this->hasMany(TransactionChat::class);
     }
 
     /**

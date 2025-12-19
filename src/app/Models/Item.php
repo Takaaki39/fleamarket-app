@@ -65,14 +65,14 @@ class Item extends Model
         return $this->hasMany(Sell::class);
     }
 
-    public function progresse()
+    public function transaction()
     {
-        return $this->hasOne(Progress::class);
+        return $this->hasOne(Transaction::class);
     }
 
-    public function progresses()
+    public function transactions()
     {
-        return $this->hasMany(Progress::class);
+        return $this->hasMany(Transaction::class);
     }
 
     // img_url のアクセサ

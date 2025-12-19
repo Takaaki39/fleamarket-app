@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('css')
-<link rel="stylesheet" href="{{asset('css/profile/progress_chat.css')}}">
+<link rel="stylesheet" href="{{asset('css/profile/transaction_chat.css')}}">
 @endsection
 
 @section('content')
@@ -12,13 +12,13 @@
         <h1 class="sidebar-title">その他の取引</h1>
         @if($is_customer === false)
         <ul class="product-list">
-            @foreach($progresses as $transaction)
+            @foreach($transactions as $element)
             <li>
                 <a
-                    href="{{ route('progress', ['progress_id' => $transaction->id]) }}"
-                    class="progress-link
-                        {{ request()->route('progress_id') == $transaction->id ? 'active' : '' }}">
-                    {{ $transaction->item->name }}
+                    href="{{ route('transaction', ['transaction_id' => $element->id]) }}"
+                    class="transaction-link
+                        {{ request()->route('transaction_id') == $element->id ? 'active' : '' }}">
+                    {{ $element->item->name }}
                 </a>
             </li>
             @endforeach
@@ -85,7 +85,7 @@
                             <div class="error"> {{ $errors->editChat->first('message') }}</div>
                             @endif
                             <form method="POST"
-                                action="{{ route('progress_chat.edit', ['progress_id' => $progress->id]) }}"
+                                action="{{ route('transaction_chat.edit', ['transaction_id' => $transaction->id]) }}"
                                 class="inline-form" novalidate>
                                 @csrf
                                 <input type="hidden" name="chat_id" value="{{ $chat->id }}">
@@ -93,7 +93,7 @@
                             </form>
 
                             <form method="POST"
-                                action="{{ route('progress_chat.delete', ['progress_id' => $progress->id]) }}"
+                                action="{{ route('transaction_chat.delete', ['transaction_id' => $transaction->id]) }}"
                                 class="inline-form"
                                 onsubmit="return confirm('削除しますか？');" novalidate>
                                 @csrf
@@ -106,7 +106,7 @@
                     {{-- 編集用 --}}
                     <form
                         method="POST"
-                        action="{{ route('progress_chat.edit', ['progress_id' => $progress->id]) }}"
+                        action="{{ route('transaction_chat.edit', ['transaction_id' => $transaction->id]) }}"
                         class="edit-form"
                         id="edit-form-{{ $chat->id }}"
                         style="display:none;">
@@ -167,12 +167,12 @@
         <form
             class="chat-input"
             method="POST"
-            action="{{ route('progress_chat', ['progress_id' => $progress->id]) }}"
+            action="{{ route('transaction_chat', ['transaction_id' => $transaction->id]) }}"
             enctype="multipart/form-data"
             novalidate>
             @csrf
 
-            <input type="hidden" name="progress_id" value="{{ $progress->id }}">
+            <input type="hidden" name="transaction_id" value="{{ $transaction->id }}">
             <input
                 type="text"
                 id="chatMessageInput"
@@ -190,7 +190,7 @@
                 <img src="{{ asset('storage/images/inputbutton.png') }}" alt="">
             </button>
         </form>
-        @error('message', 'progressChat')
+        @error('message', 'transactionChat')
         <div class="error">{{ $message }}</div>
         @enderror
         @error('image')
@@ -218,7 +218,7 @@
                 <hr>
 
                 <div class="modal-actions">
-                    <form method="POST" action="{{ route('progress.complete', ['progress_id' => $progress->id]) }}">
+                    <form method="POST" action="{{ route('transaction.complete', ['transaction_id' => $transaction->id]) }}">
                         @csrf
                         <input type="hidden" name="rating" id="ratingInput">
                         <button type="submit" class="modal-send">
@@ -228,7 +228,7 @@
                 </div>
             </div>
         </div>
-        @if($progress->status === 1)
+        @if($transaction->status === 1)
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 openCompleteModal();
@@ -239,8 +239,8 @@
 </div>
 
 <script>
-    const progressId = {{ $progress->id}};
-    const draftKey = `chat_draft_${progressId}`;
+    const transactionId = {{ $transaction->id }};
+    const draftKey = `chat_draft_${transactionId}`;
     const messageInput = document.getElementById('chatMessageInput');
 
     /* ページ表示時：下書きを復元 */
@@ -251,7 +251,7 @@
         }
     });
 
-    /* 入力中：progress_idごとに保存 */
+    /* 入力中：transaction_idごとに保存 */
     messageInput.addEventListener('input', () => {
         localStorage.setItem(draftKey, messageInput.value);
     });

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProgressChat extends Model
+class TransactionChat extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'progress_id',
+        'transaction_id',
         'user_id',
         'message',
         'image',
@@ -17,11 +17,11 @@ class ProgressChat extends Model
     ];
 
     /**
-     * 取引（Progress）
+     * 取引（Transaction）
      */
-    public function progress()
+    public function transaction()
     {
-        return $this->belongsTo(Progress::class);
+        return $this->belongsTo(Transaction::class);
     }
 
     /**

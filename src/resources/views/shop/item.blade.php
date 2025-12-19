@@ -41,7 +41,7 @@
         </div>
 
         <form method="POST"
-            action="{{ route('progress.start', ['item_id' => $item->id]) }}">
+            action="{{ route('transaction.start', ['item_id' => $item->id]) }}">
             @csrf
             <button type="submit" class="buy-btn" style="border: none;"><!-- ボタンの枠線を消す -->
                 取引を開始する

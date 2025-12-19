@@ -6,7 +6,7 @@ use App\Http\Controllers\MypageController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProgressChatController;
+use App\Http\Controllers\TransactionChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,12 +36,13 @@ Route::prefix('purchase')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
 
-    Route::post('/progress/start/{item_id}', [ProgressChatController::class, 'start'])->name('progress.start'); // 取引開始
-    Route::get('/progress_chat/{progress_id}', [ProgressChatController::class, 'progress'])->name('progress');
-    Route::post('/progress_chat/{progress_id}/chat', [ProgressChatController::class, 'chat'])->name('progress_chat');
-    Route::post('/progress_chat/{progress_id}/edit', [ProgressChatController::class, 'editChat'])->name('progress_chat.edit');
-    Route::post('/progress_chat/{progress_id}/delete', [ProgressChatController::class, 'deleteChat'])->name('progress_chat.delete');
-    Route::post('/progress_chat/{progress_id}/complete', [ProgressChatController::class, 'complete'])->name('progress.complete');
+    Route::post('/transaction/start/{item_id}', [TransactionChatController::class, 'start'])->name('transaction.start'); // 取引開始
+    Route::get('/transaction_chat/{transaction_id}', [TransactionChatController::class, 'transaction'])->name('transaction'); // 取引チャット画面
+    Route::post('/transaction_chat/{transaction_id}/chat', [TransactionChatController::class, 'chat'])->name('transaction_chat');
+    Route::post('/transaction_chat/{transaction_id}/edit', [TransactionChatController::class, 'editChat'])->name('transaction_chat.edit');
+    Route::post('/transaction_chat/{transaction_id}/delete', [TransactionChatController::class, 'deleteChat'])->name('transaction_chat.delete');
+    Route::post('/transaction_chat/{transaction_id}/complete', [TransactionChatController::class, 'complete'])->name('transaction.complete');
+
     Route::get('/sell', [SellController::class, 'create'])->name('sell.create');
     Route::post('/item/{item_id}/star', [ItemController::class, 'star'])->name('items.star');
     Route::post('/item/{item_id}/comment', [ItemController::class, 'comment'])->name('items.comment');

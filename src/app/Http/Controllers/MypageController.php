@@ -16,13 +16,13 @@ class MypageController extends Controller
         $user = Auth::user();
 
         $items = [];
-        $progresses = [];
+        $transactions = [];
         if ($request->page === null || $request->page === 'sell') {
             $items = $user->selledItems()->with('sells')->get();
         } else if ($request->page === 'buy') {
             $items = $user->purchasedItems()->with('purchases')->get();
         } else {
-            $progresses = $user->allProgresses()->get();
+            $transactions = $user->allTransactions()->get();
         }
 
         // 平均評価（小数）
@@ -34,7 +34,7 @@ class MypageController extends Controller
             ? floor($averageRating)
             : 0;
 
-        return view('profile/mypage', compact('user', 'items', 'progresses', 'displayRating'));
+        return view('profile/mypage', compact('user', 'items', 'transactions', 'displayRating'));
     }
 
     public function edit()

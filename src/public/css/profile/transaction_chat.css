@@ -29,7 +29,7 @@
     border-radius: 4px;
 }
 
-.progress-link {
+.transaction-link {
     display: block;
     text-decoration: none;
     color: #000;
@@ -37,11 +37,11 @@
     border-radius: 4px;
 }
 
-.progress-link:hover {
+.transaction-link:hover {
     background: #eee;
 }
 
-.progress-link.active {
+.transaction-link.active {
     font-weight: bold;
 }
 

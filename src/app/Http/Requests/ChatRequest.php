@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ChatRequest extends FormRequest
 {
-    protected $errorBag = 'progressChat';
+    protected $errorBag = 'transactionChat';
     /**
      * Determine if the user is authorized to make this request.
      *
