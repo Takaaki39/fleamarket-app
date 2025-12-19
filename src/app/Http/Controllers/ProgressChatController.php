@@ -12,10 +12,39 @@ use App\Models\ProgressChat;
 use App\Models\Sell;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class ProgressChatController extends Controller
 {
+    public function start($item_id)
+    {
+        $user = Auth::user();
+
+        $item = Item::findOrFail($item_id);
+
+        // すでに取引中かチェック（重複防止）
+        $progress = Progress::where('item_id', $item->id)
+            ->where('customer_id', $user->id)
+            ->first();
+
+        $seller = Sell::where('item_id', $item->id)->first();
+
+        if (!$progress) {
+            $progress = Progress::create([
+                'item_id'     => $item->id,
+                'user_id'     => $seller->user_id, // 出品者
+                'customer_id' => $user->id,       // 購入者
+                'status'      => 0,               // 取引中
+            ]);
+        }
+
+        // 作成後、そのままチャット画面へ
+        return redirect()->route('progress', [
+            'progress_id' => $progress->id
+        ]);
+    }
+
     //
     public function progress($progress_id)
     {

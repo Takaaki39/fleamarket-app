@@ -11,6 +11,13 @@ class Progress extends Model
     use HasFactory;
     protected $table = 'progresses';
 
+    protected $fillable = [
+        'item_id',
+        'user_id',
+        'customer_id',
+        'status',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

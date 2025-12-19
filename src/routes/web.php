@@ -35,6 +35,8 @@ Route::prefix('purchase')->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
+
+    Route::post('/progress/start/{item_id}', [ProgressChatController::class, 'start'])->name('progress.start'); // 取引開始
     Route::get('/progress_chat/{progress_id}', [ProgressChatController::class, 'progress'])->name('progress');
     Route::post('/progress_chat/{progress_id}/chat', [ProgressChatController::class, 'chat'])->name('progress_chat');
     Route::post('/progress_chat/{progress_id}/edit', [ProgressChatController::class, 'editChat'])->name('progress_chat.edit');

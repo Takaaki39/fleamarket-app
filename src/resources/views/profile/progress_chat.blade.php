@@ -175,6 +175,7 @@
             <input type="hidden" name="progress_id" value="{{ $progress->id }}">
             <input
                 type="text"
+                id="chatMessageInput"
                 name="message"
                 placeholder="取引メッセージを記入してください"
                 value="{{ old('message') }}"
@@ -238,6 +239,27 @@
 </div>
 
 <script>
+    const progressId = {{ $progress->id}};
+    const draftKey = `chat_draft_${progressId}`;
+    const messageInput = document.getElementById('chatMessageInput');
+
+    /* ページ表示時：下書きを復元 */
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedDraft = localStorage.getItem(draftKey);
+        if (savedDraft !== null) {
+            messageInput.value = savedDraft;
+        }
+    });
+
+    /* 入力中：progress_idごとに保存 */
+    messageInput.addEventListener('input', () => {
+        localStorage.setItem(draftKey, messageInput.value);
+    });
+
+    /* 送信時：下書きを削除 */
+    document.querySelector('.chat-input').addEventListener('submit', () => {
+        localStorage.removeItem(draftKey);
+    });
     window.addEventListener('load', () => {
         const chatArea = document.getElementById('chatArea');
         chatArea.scrollTop = chatArea.scrollHeight;

@@ -40,6 +40,14 @@
             </div>
         </div>
 
+        <form method="POST"
+            action="{{ route('progress.start', ['item_id' => $item->id]) }}">
+            @csrf
+            <button type="submit" class="buy-btn" style="border: none;"><!-- ボタンの枠線を消す -->
+                取引を開始する
+            </button>
+        </form>
+
         <a href="{{ route('purchase.index', ['item_id' => $item->id]) }}" class="buy-btn">
             購入手続きへ
         </a>
