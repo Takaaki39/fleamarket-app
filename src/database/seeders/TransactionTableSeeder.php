@@ -22,13 +22,6 @@ class TransactionTableSeeder extends Seeder
         DB::table('transactions')->insert($param);
 
         $param = [
-            'customer_id'          => 2,
-            'user_id'          => 1,
-            'item_id'          => 2,
-        ];
-        DB::table('transactions')->insert($param);
-
-        $param = [
             'customer_id'          => 1,
             'user_id'          => 2,
             'item_id'          => 6,
