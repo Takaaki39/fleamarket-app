@@ -25,6 +25,9 @@ class MypageController extends Controller
             $transactions = $user->allTransactions();
         }
 
+        // 評価が1つもない場合は非表示
+        $is_has_evaluation = Evaluation::where('user_id', $user->id)->exists();
+
         // 平均評価（小数）
         $averageRating = Evaluation::where('user_id', $user->id)
             ->avg('rating');
@@ -34,7 +37,7 @@ class MypageController extends Controller
             ? round($averageRating)
             : 0;
 
-        return view('profile/mypage', compact('user', 'items', 'transactions', 'displayRating'));
+        return view('profile/mypage', compact('user', 'items', 'transactions', 'displayRating', 'is_has_evaluation'));
     }
 
     public function edit()

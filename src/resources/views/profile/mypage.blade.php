@@ -17,9 +17,11 @@
             <h1 class="username">{{ $user->name }}</h1>
 
             <div class="rating">
+                @if($is_has_evaluation)
                 @for ($i = 1; $i <= 5; $i++)
                     <span class="{{ $i <= $displayRating ? 'active' : '' }}">★</span>
                     @endfor
+                    @endif
             </div>
         </div>
         <a class="edit-btn" href="{{ route('mypage.edit') }}">
