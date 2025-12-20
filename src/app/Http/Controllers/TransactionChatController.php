@@ -27,7 +27,7 @@ class TransactionChatController extends Controller
         $transaction = Transaction::where('item_id', $item->id)
             ->where('customer_id', $user->id)
             ->first();
-        if ($transaction->status === 2) {
+        if ($transaction && $transaction->status === 2) {
             $transaction->status = 0;
             $transaction->save();
         }
